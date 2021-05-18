@@ -1,0 +1,19 @@
+{
+  "name": "esp-admin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build-css": "tailwindcss build src/tailwind.css -o www/css/tailwind.css",
+    "build": "set NODE_ENV=production && npm run build-css && gzipper c ./www ../data/www"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^2.1.2",
+    "tailwindcss-cli": "^0.1.2"
+  },
+  "dependencies": {
+    "alpinejs": "^2.8.2"
+  }
+}
