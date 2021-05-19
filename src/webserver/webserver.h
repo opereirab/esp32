@@ -21,6 +21,7 @@ private:
   static void onBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
   static void onUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final);
   static void onWebSocketEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type, void * arg, uint8_t *data, size_t len);
+  static String processor(const String& var);
 
 private:
   void routes();

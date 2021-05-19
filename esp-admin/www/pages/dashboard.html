@@ -1,4 +1,4 @@
-<div class="p-8 divide-y-2 divide-gray-50">
+<div x-data="dashboard()" x-init="init()" class="p-8 divide-y-2 divide-gray-50">
   <!-- This example requires Tailwind CSS v2.0+ -->
   <div class="lg:flex lg:items-center lg:justify-between pb-6 sm:pb-8">
     <div class="flex-1 min-w-0">
@@ -23,13 +23,18 @@
               <div class="flex-1 flex flex-col px-4 py-2 text-sm truncate">
                 <div class="flex-1 flex flex-wrap flex-col md:flex-row">
                   <span
-                  class="flex-grow text-gray-900 font-medium hover:text-gray-600 truncate"
-                  >Wireless Enterprise AP 1</span>
+                    class="flex-grow text-gray-900 font-medium hover:text-gray-600 truncate"
+                    x-text="(model?.wifi?.connected) ? model.wifi.ssid : 'Not Connected'"
+                  ></span>
                   <span
-                  class="flex-none text-gray-500"
-                  >-58mBd</span>
+                    class="flex-none text-gray-500"
+                    x-text="(model?.wifi?.connected) ? (model.wifi.rssi + 'dBm'): ''"
+                  ></span>
                 </div>                
-                <p class="text-gray-500">192.168.0.103</p>
+                <p 
+                  class="text-gray-500"
+                  x-text="(model?.wifi?.connected) ? (model.wifi.ip || '') : ''"
+                ></p>
               </div>
               <div class="flex-shrink-0 pr-2">
                 <button
@@ -67,13 +72,19 @@
               <div class="flex-1 flex flex-col px-4 py-2 text-sm truncate">
                 <div class="flex-1 flex flex-wrap flex-col md:flex-row">
                   <span
-                  class="flex-grow text-gray-900 font-medium hover:text-gray-600 truncate"
-                  >ESP32_CF24FAB_AP</span>
+                    class="flex-grow text-gray-900 font-medium hover:text-gray-600 truncate"
+                    x-text="(model?.ap) ? model.ap.ssid : 'Not Connected'"
+                  ></span>
                   <span
                     class="flex-none text-gray-500"
-                  ><!-- -58mBd --></span>
+                    x-text="(model?.ap) ? model.ap.num : 0"
+                  ></span>
                 </div>                
-                <p class="text-gray-500"><a href="#">192.168.4.1</a><span class="hidden md:inline-flex">&minus;</span><a href="#" class="hidden md:inline-flex">esp32.local</a></p>
+                <p class="text-gray-500">
+                  <span x-text="(model?.ap) ? model.ap.ip : 'Not Connected'"></span>
+                  <span class="hidden md:inline-flex">&minus;</span>
+                  <span x-text="(model?.ap) ? 'esp32.local' : 'Not Connected'" class="hidden md:inline-flex"></a>
+                </p>
               </div>
               <div class="flex-shrink-0 pr-2">
                 <button
@@ -453,6 +464,23 @@
       </div>
     </dl>
   </div>
-
-
 </div>
+
+<script>
+  function dashboard() {
+    return {
+      model: null,
+      init() {
+        fetch("/command", {
+          method: "POST",
+          body: JSON.stringify({ cmd: 1 })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          this.model = data
+        });
+      }
+    }
+  }
+</script>

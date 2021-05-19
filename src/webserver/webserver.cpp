@@ -1,4 +1,6 @@
 #include "webserver.h"
+#include "settings/settings.h"
+#include "commands/cmdprocessor.h"
 
 Webserver webserver;
 
@@ -32,6 +34,15 @@ void Webserver::onWebSocketEvent(AsyncWebSocket * server, AsyncWebSocketClient *
   //Handle WebSocket event
 }
 
+String Webserver::processor(const String& var)
+{
+  Serial.println(var);
+  if(var == "PLACEHOLDER_SSID") {
+    return settings.network.ssid;
+  }
+  return "";
+}
+
 void Webserver::routes() {
   server.on("/command", HTTP_POST, [](AsyncWebServerRequest * request) { }, NULL, 
     [](AsyncWebServerRequest * request, uint8_t *data, size_t len, size_t index, size_t total) {
@@ -40,8 +51,10 @@ void Webserver::routes() {
       payload += (char)data[i];  
     }
     if(payload.length() < total) return;
-    Serial.println(payload);
-    request->send(200, "application/json", "{}");   
+    
+    String resp = cmdprocessor.process(payload, total);
+    Serial.println(resp);
+    request->send(200, "application/json", resp);   
   });
 }
 

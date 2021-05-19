@@ -102,6 +102,9 @@
             <a href="javascript:;" @click="dashboard()" class="text-base font-medium text-gray-500 hover:text-gray-900">
               Dashboard
             </a>
+            <a href="javascript:;" @click="settings()" class="text-base font-medium text-gray-500 hover:text-gray-900">
+              Settings
+            </a>
             <div>
               <!-- Item active: "text-gray-900", Item inactive: "text-gray-500" -->
               <button 
@@ -498,6 +501,15 @@
         dashboard() {
           showLoading();
           fetch("./pages/dashboard.html")
+            .then(response => response.text())
+            .then(html => {
+              setHtml(document.getElementById("main-content"), html);
+              hideLoading();
+            });
+        },
+        settings() {
+          showLoading();
+          fetch("./pages/settings.html")
             .then(response => response.text())
             .then(html => {
               setHtml(document.getElementById("main-content"), html);
