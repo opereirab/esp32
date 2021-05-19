@@ -164,6 +164,8 @@ module.exports = {
       '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
       inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
       none: 'none',
+      'notification-success': '0px 0px 4px 1px rgba(4, 120, 87,0.7), 0px 0px 4px 1px rgba(4, 120, 87,0.7)',
+      'notification-error': '0px 0px 4px 1px rgba(185, 28, 28,0.7), 0px 0px 4px 1px rgba(185, 28, 28,0.7)',
     },
     contrast: {
       0: '0',
@@ -959,5 +961,7 @@ module.exports = {
     wordBreak: ['responsive'],
     zIndex: ['responsive', 'focus-within', 'focus'],
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+  ],
 }
