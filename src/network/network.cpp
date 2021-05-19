@@ -136,7 +136,7 @@ void Network::setup()
 {
   WiFi.onEvent(&Network::onEvent);
   WiFi.mode(WIFI_MODE_APSTA);
-  WiFi.softAP(settings.network.apSSID().c_str());
+  WiFi.softAP(settings.network.apSSID().c_str(), settings.network.passpharse);
   WiFi.begin(settings.network.ssid, settings.network.password);
 
   dns.setErrorReplyCode(DNSReplyCode::NoError);

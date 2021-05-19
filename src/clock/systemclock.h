@@ -15,6 +15,11 @@ public:
 public:
   String getTime();
 
+public:
+  void setup();
+  void loop();
+
+
 };
 
 extern SystemClock systemclock;

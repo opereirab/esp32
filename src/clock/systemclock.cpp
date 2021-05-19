@@ -14,3 +14,13 @@ String SystemClock::getTime()
 {
   return rtc.getTime("%d/%m/%Y %H:%M:%S");
 }
+
+void SystemClock::setup()
+{
+  rtc.getEpoch();
+}
+
+void SystemClock::loop()
+{
+
+}
