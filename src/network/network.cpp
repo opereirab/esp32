@@ -32,10 +32,6 @@ void Network::onEvent(arduino_event_id_t event, arduino_event_info_t info)
       Logger::log("ARDUINO_EVENT_WIFI_STA_STOP");
       break;
     }
-    case SYSTEM_EVENT_STA_CONNECTED: {      
-      Logger::log("ESP32 station connected to AP");      
-      break;
-    }
     case ARDUINO_EVENT_WIFI_STA_DISCONNECTED: {
       Logger::log("ARDUINO_EVENT_WIFI_STA_DISCONNECTED");
       WiFi.disconnect();
@@ -67,6 +63,10 @@ void Network::onEvent(arduino_event_id_t event, arduino_event_info_t info)
     }
     case ARDUINO_EVENT_WIFI_AP_STACONNECTED: {
       Logger::log("ARDUINO_EVENT_WIFI_AP_STACONNECTED");
+      StaticJsonDocument<32> doc;
+      doc["cmd"] = RESPONSE_SYSTEM_EVENT_AP_STACONNECTED;
+      doc["data"] = WiFi.softAPgetStationNum();
+      webserver.sendEvent(RESPONSE_SYSTEM_EVENT_AP_STACONNECTED, doc);
       break;
     }
     case ARDUINO_EVENT_WIFI_AP_STADISCONNECTED: {
@@ -75,6 +75,10 @@ void Network::onEvent(arduino_event_id_t event, arduino_event_info_t info)
     }
     case ARDUINO_EVENT_WIFI_AP_STAIPASSIGNED: {
       Logger::log("ARDUINO_EVENT_WIFI_AP_STAIPASSIGNED");
+      StaticJsonDocument<32> doc;
+      doc["cmd"] = RESPONSE_SYSTEM_EVENT_AP_STAIPASSIGNED;
+      doc["data"] = WiFi.softAPgetStationNum();
+      webserver.sendEvent(RESPONSE_SYSTEM_EVENT_AP_STAIPASSIGNED, doc);
       break;
     }
     case ARDUINO_EVENT_WIFI_AP_PROBEREQRECVED: {
