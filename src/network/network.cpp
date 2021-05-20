@@ -1,5 +1,6 @@
 #include "network.h"
 #include "settings/settings.h"
+#include "webserver/webserver.h"
 
 Network network;
 
@@ -31,15 +32,13 @@ void Network::onEvent(system_event_id_t event, system_event_info_t info)
       Logger::log("ESP32 station stop");
       break;
     }
-    case SYSTEM_EVENT_STA_CONNECTED: {
-      Logger::log("ESP32 station connected to AP");
+    case SYSTEM_EVENT_STA_CONNECTED: {      
+      Logger::log("ESP32 station connected to AP");      
       break;
     }
     case SYSTEM_EVENT_STA_DISCONNECTED: {
       Logger::log("ESP32 station disconnected from AP");
       WiFi.disconnect();
-      //WiFi.mode(WIFI_MODE_AP);
-      // WiFi.softAP("ESP32_AP");
       break;
     }
     case SYSTEM_EVENT_STA_AUTHMODE_CHANGE: {
@@ -84,14 +83,26 @@ void Network::onEvent(system_event_id_t event, system_event_info_t info)
     }
     case SYSTEM_EVENT_AP_STACONNECTED: {
       Logger::log("A station connected to ESP32 soft-AP");
+      StaticJsonDocument<32> doc;
+      doc["cmd"] = RESPONSE_SYSTEM_EVENT_AP_STACONNECTED;
+      doc["data"] = WiFi.softAPgetStationNum();
+      webserver.sendEvent(RESPONSE_SYSTEM_EVENT_AP_STACONNECTED, doc);
       break;
     }
     case SYSTEM_EVENT_AP_STADISCONNECTED: {
       Logger::log("A station disconnected from ESP32 soft-AP");
+      StaticJsonDocument<32> doc;
+      doc["cmd"] = RESPONSE_SYSTEM_EVENT_AP_STADISCONNECTED;
+      doc["data"] = WiFi.softAPgetStationNum();
+      webserver.sendEvent(RESPONSE_SYSTEM_EVENT_AP_STADISCONNECTED, doc);
       break;
     }
     case SYSTEM_EVENT_AP_STAIPASSIGNED: {
       Logger::log("ESP32 soft-AP assign an IP to a connected station");
+      StaticJsonDocument<32> doc;
+      doc["cmd"] = RESPONSE_SYSTEM_EVENT_AP_STAIPASSIGNED;
+      doc["data"] = WiFi.softAPgetStationNum();
+      webserver.sendEvent(RESPONSE_SYSTEM_EVENT_AP_STAIPASSIGNED, doc);
       break;
     }
     case SYSTEM_EVENT_AP_PROBEREQRECVED: {

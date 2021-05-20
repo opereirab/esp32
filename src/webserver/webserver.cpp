@@ -58,6 +58,15 @@ void Webserver::routes() {
   });
 }
 
+void Webserver::sendEvent(CommandType cmd, JsonDocument& doc)
+{
+  if(events.count() > 0) {
+    String message = "";
+    serializeJson(doc, message);
+    events.send(message.c_str());
+  }
+}
+
 void Webserver::setup()
 {
   DefaultHeaders::Instance().addHeader("Access-Control-Allow-Credentials", "true");

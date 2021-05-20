@@ -2,6 +2,8 @@
 #define _WEBSERVER_H_
 
 #include "filesystem/filesystem.h"
+#include "commands/cmds.h"
+#include <ArduinoJson.h>
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 
@@ -25,6 +27,9 @@ private:
 
 private:
   void routes();
+
+public:
+  void sendEvent(CommandType cmd, JsonDocument& doc);
 
 public:
   void setup();

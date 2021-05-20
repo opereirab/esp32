@@ -71,7 +71,11 @@ enum CommandType {
   RESPONSE_SAVE_MODBUS_SETTINGS               = 129,
 
   RESPONSE_SIGNIN                             = 130,
-  RESPONSE_AUTHORIZED                         = 230
+  RESPONSE_AUTHORIZED                         = 230,
+
+  RESPONSE_SYSTEM_EVENT_AP_STACONNECTED         = 246,
+  RESPONSE_SYSTEM_EVENT_AP_STADISCONNECTED      = 247,
+  RESPONSE_SYSTEM_EVENT_AP_STAIPASSIGNED        = 248
 };
 
 #endif

@@ -547,7 +547,47 @@
       }
     }
 
+    function process(payload) {
+      console.log(payload);
+      switch (payload.cmd) {
+        case 246:
+        case 247:
+        case 248: {
+          let elem = document.getElementById("num");
+          if(elem) {  
+            elem.innerHTML = payload.data;
+          }
+          break;
+        }
+        default: {
+          break;
+        }          
+      }
+    }
+
+    function initializeEvents() {
+      if(window.EventSource) {
+        var source = new EventSource('/events');
+
+        source.onopen = (ev) => {
+          console.log("Events Connected");
+        }
+
+        source.onerror = (ev) => {
+          if (e.target.readyState != EventSource.OPEN) {
+            console.log("Events Disconnected");
+          }
+        }
+
+        source.onmessage = (ev) => {
+          let payload = JSON.parse(ev.data);          
+          process(payload);
+        }
+      }
+    }
+
     function onDocumentReady() {
+      initializeEvents();
       showLoading();
       setTimeout(() => {
         fetch("./pages/dashboard.html")
@@ -556,7 +596,7 @@
           setHtml(document.getElementById("main-content"), html);
           hideLoading();
         });
-      }, 3000);      
+      }, 3000);
     }
   </script>
 </body>

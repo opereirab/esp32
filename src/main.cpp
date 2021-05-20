@@ -21,5 +21,11 @@ void setup() {
 
 void loop() {
   network.loop();
+
+  StaticJsonDocument<64> doc;
+  doc["cmd"] = 0;
+  doc["time"] = systemclock.getTime();
+  webserver.sendEvent(CommandType::UNKNOW, doc);
+
   yield();
 }
