@@ -17,7 +17,7 @@ public:
   virtual ~Network();
 
 private:
-  static void onEvent(arduino_event_id_t event, arduino_event_info_t info);
+  static void onEvent(system_event_id_t event, system_event_info_t info);
 
 public:
   void setup();

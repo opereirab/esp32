@@ -60,7 +60,7 @@ void Webserver::routes() {
 
 void Webserver::sendEvent(CommandType cmd, JsonDocument& doc)
 {
-  if(events.count() > 0) {
+  if(events.count() > 0) {    
     String message = "";
     serializeJson(doc, message);
     events.send(message.c_str());
@@ -78,7 +78,7 @@ void Webserver::setup()
   ws.onEvent(&Webserver::onWebSocketEvent);
   server.addHandler(&ws);
 
-  // attach AsyncEventSource
+  // attach AsyncEventSource  
   server.addHandler(&events);
 
   routes();
@@ -97,5 +97,5 @@ void Webserver::setup()
 }
 
 void Webserver::loop()
-{
+{  
 }
