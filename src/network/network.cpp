@@ -11,123 +11,173 @@ Network::~Network()
 {
 }
 
-void Network::onEvent(system_event_id_t event, system_event_info_t info)
-{
+void Network::onEvent(arduino_event_id_t event, arduino_event_info_t info)
+{  
   switch (event)
   {
-    case SYSTEM_EVENT_WIFI_READY:{
-      Logger::log("ESP32 WiFi ready");
+    case ARDUINO_EVENT_WIFI_READY: {
+      Logger::log("ARDUINO_EVENT_WIFI_READY");
       break;
-    } 
-    case SYSTEM_EVENT_SCAN_DONE: {
-      Logger::log("ESP32 finish scanning AP");
+    },
+    case ARDUINO_EVENT_WIFI_SCAN_DONE: {
+      Logger::log("ARDUINO_EVENT_WIFI_SCAN_DONE");
       break;
-    }
-    case SYSTEM_EVENT_STA_START: {
-      Logger::log("ESP32 station start");
+    },
+    case ARDUINO_EVENT_WIFI_STA_START: {
+      Logger::log("ARDUINO_EVENT_WIFI_STA_START");
       break;
-    }
-    case SYSTEM_EVENT_STA_STOP: {
-      Logger::log("ESP32 station stop");
+    },
+    case ARDUINO_EVENT_WIFI_STA_STOP: {
+      Logger::log("ARDUINO_EVENT_WIFI_STA_STOP");
       break;
-    }
-    case SYSTEM_EVENT_STA_CONNECTED: {
-      Logger::log("ESP32 station connected to AP");
+    },
+    case ARDUINO_EVENT_WIFI_STA_CONNECTED: {
+      Logger::log("ARDUINO_EVENT_WIFI_STA_CONNECTED");
       break;
-    }
-    case SYSTEM_EVENT_STA_DISCONNECTED: {
-      Logger::log("ESP32 station disconnected from AP");
+    },
+    case ARDUINO_EVENT_WIFI_STA_DISCONNECTED: {
+      Logger::log("ARDUINO_EVENT_WIFI_STA_DISCONNECTED");
       WiFi.disconnect();
-      //WiFi.mode(WIFI_MODE_AP);
-      // WiFi.softAP("ESP32_AP");
       break;
-    }
-    case SYSTEM_EVENT_STA_AUTHMODE_CHANGE: {
-      Logger::log("The auth mode of AP connected by ESP32 station changed");
+    },
+    case ARDUINO_EVENT_WIFI_STA_AUTHMODE_CHANGE: {
+      Logger::log("ARDUINO_EVENT_WIFI_STA_AUTHMODE_CHANGE");
       break;
-    }
-    case SYSTEM_EVENT_STA_GOT_IP: {
-      Logger::log("ESP32 station got IP from connected AP");
+    },
+    case ARDUINO_EVENT_WIFI_STA_GOT_IP: {
+      Logger::log("ARDUINO_EVENT_WIFI_STA_GOT_IP");
       break;
-    }
-    case SYSTEM_EVENT_STA_LOST_IP: {
-      Logger::log("ESP32 station lost IP and the IP is reset to 0");
+    },
+    case ARDUINO_EVENT_WIFI_STA_GOT_IP6: {
+      Logger::log("ARDUINO_EVENT_WIFI_STA_GOT_IP6");
       break;
-    }
-    case SYSTEM_EVENT_STA_WPS_ER_SUCCESS: {
-      Logger::log("ESP32 station wps succeeds in enrollee mode");
+    },
+    case ARDUINO_EVENT_WIFI_STA_LOST_IP: {
+      Logger::log("ARDUINO_EVENT_WIFI_STA_LOST_IP");
       break;
-    }
-    case SYSTEM_EVENT_STA_WPS_ER_FAILED: {
-      Logger::log("ESP32 station wps fails in enrollee mode");
+    },
+    case ARDUINO_EVENT_WIFI_AP_START: {
+      Logger::log("ARDUINO_EVENT_WIFI_AP_START");
       break;
-    }
-    case SYSTEM_EVENT_STA_WPS_ER_TIMEOUT: {
-      Logger::log("ESP32 station wps timeout in enrollee mode");
+    },
+    case ARDUINO_EVENT_WIFI_AP_STOP: {
+      Logger::log("ARDUINO_EVENT_WIFI_AP_STOP");
       break;
-    }
-    case SYSTEM_EVENT_STA_WPS_ER_PIN: {
-      Logger::log("ESP32 station wps pin code in enrollee mode");
+    },
+    case ARDUINO_EVENT_WIFI_AP_STACONNECTED: {
+      Logger::log("ARDUINO_EVENT_WIFI_AP_STACONNECTED");
       break;
-    }
-    case SYSTEM_EVENT_STA_WPS_ER_PBC_OVERLAP: {
-      Logger::log("ESP32 station wps overlap in enrollee mode");
+    },
+    case ARDUINO_EVENT_WIFI_AP_STADISCONNECTED: {
+      Logger::log("ARDUINO_EVENT_WIFI_AP_STADISCONNECTED");
       break;
-    }
-    case SYSTEM_EVENT_AP_START: {
-      Logger::log("ESP32 soft-AP start");
+    },
+    case ARDUINO_EVENT_WIFI_AP_STAIPASSIGNED: {
+      Logger::log("ARDUINO_EVENT_WIFI_AP_STAIPASSIGNED");
       break;
-    }
-    case SYSTEM_EVENT_AP_STOP: {
-      Logger::log("ESP32 soft-AP stop");
+    },
+    case ARDUINO_EVENT_WIFI_AP_PROBEREQRECVED: {
+      Logger::log("ARDUINO_EVENT_WIFI_AP_PROBEREQRECVED");
       break;
-    }
-    case SYSTEM_EVENT_AP_STACONNECTED: {
-      Logger::log("A station connected to ESP32 soft-AP");
+    },
+    case ARDUINO_EVENT_WIFI_AP_GOT_IP6: {
+      Logger::log("ARDUINO_EVENT_WIFI_AP_GOT_IP6");
       break;
-    }
-    case SYSTEM_EVENT_AP_STADISCONNECTED: {
-      Logger::log("A station disconnected from ESP32 soft-AP");
+    },
+    case ARDUINO_EVENT_ETH_START: {
+      Logger::log("ARDUINO_EVENT_ETH_START");
       break;
-    }
-    case SYSTEM_EVENT_AP_STAIPASSIGNED: {
-      Logger::log("ESP32 soft-AP assign an IP to a connected station");
+    },
+    case ARDUINO_EVENT_ETH_STOP: {
+      Logger::log("ARDUINO_EVENT_ETH_STOP");
       break;
-    }
-    case SYSTEM_EVENT_AP_PROBEREQRECVED: {
-      Logger::log("Receive probe request packet in soft-AP interface");
+    },
+    case ARDUINO_EVENT_ETH_CONNECTED: {
+      Logger::log("ARDUINO_EVENT_ETH_CONNECTED");
       break;
-    }
-    case SYSTEM_EVENT_GOT_IP6: {
-      Logger::log("ESP32 station or ap or ethernet interface v6IP addr is preferred");
+    },
+    case ARDUINO_EVENT_ETH_DISCONNECTED: {
+      Logger::log("ARDUINO_EVENT_ETH_DISCONNECTED");
       break;
-    }
-    case SYSTEM_EVENT_ETH_START: {
-      Logger::log("ESP32 ethernet start");
+    },
+    case ARDUINO_EVENT_ETH_GOT_IP: {
+      Logger::log("ARDUINO_EVENT_ETH_GOT_IP");
       break;
-    }
-    case SYSTEM_EVENT_ETH_STOP: {
-      Logger::log("ESP32 ethernet stop");
+    },
+    case ARDUINO_EVENT_ETH_GOT_IP6: {
+      Logger::log("ARDUINO_EVENT_ETH_GOT_IP6");
       break;
-    }
-    case SYSTEM_EVENT_ETH_CONNECTED: {
-      Logger::log("ESP32 ethernet phy link up");
+    },
+    case ARDUINO_EVENT_WPS_ER_SUCCESS: {
+      Logger::log("ARDUINO_EVENT_WPS_ER_SUCCESS");
       break;
-    }
-    case SYSTEM_EVENT_ETH_DISCONNECTED: {
-      Logger::log("ESP32 ethernet phy link down");
+    },
+    case ARDUINO_EVENT_WPS_ER_FAILED: {
+      Logger::log("ARDUINO_EVENT_WPS_ER_FAILED");
       break;
-    }
-    case SYSTEM_EVENT_ETH_GOT_IP: {
-      Logger::log("ESP32 ethernet got IP from connected AP");
+    },
+    case ARDUINO_EVENT_WPS_ER_TIMEOUT: {
+      Logger::log("ARDUINO_EVENT_WPS_ER_TIMEOUT");
       break;
-    }
-    case SYSTEM_EVENT_MAX: {
-      Logger::log("SYSTEM_EVENT_MAX");
+    },
+    case ARDUINO_EVENT_WPS_ER_PIN: {
+      Logger::log("ARDUINO_EVENT_WPS_ER_PIN");
       break;
-    }
+    },
+    case ARDUINO_EVENT_WPS_ER_PBC_OVERLAP: {
+      Logger::log("ARDUINO_EVENT_WPS_ER_PBC_OVERLAP");
+      break;
+    },
+    case ARDUINO_EVENT_SC_SCAN_DONE: {
+      Logger::log("ARDUINO_EVENT_SC_SCAN_DONE");
+      break;
+    },
+    case ARDUINO_EVENT_SC_FOUND_CHANNEL: {
+      Logger::log("ARDUINO_EVENT_SC_FOUND_CHANNEL");
+      break;
+    },
+    case ARDUINO_EVENT_SC_GOT_SSID_PSWD: {
+      Logger::log("ARDUINO_EVENT_SC_GOT_SSID_PSWD");
+      break;
+    },
+    case ARDUINO_EVENT_SC_SEND_ACK_DONE: {
+      Logger::log("ARDUINO_EVENT_SC_SEND_ACK_DONE");
+      break;
+    },
+    case ARDUINO_EVENT_PROV_INIT: {
+      Logger::log("ARDUINO_EVENT_PROV_INIT");
+      break;
+    },
+    case ARDUINO_EVENT_PROV_DEINIT: {
+      Logger::log("ARDUINO_EVENT_PROV_DEINIT");
+      break;
+    },
+    case ARDUINO_EVENT_PROV_START: {
+      Logger::log("ARDUINO_EVENT_PROV_START");
+      break;
+    },
+    case ARDUINO_EVENT_PROV_END: {
+      Logger::log("ARDUINO_EVENT_PROV_END");
+      break;
+    },
+    case ARDUINO_EVENT_PROV_CRED_RECV: {
+      Logger::log("ARDUINO_EVENT_PROV_CRED_RECV");
+      break;
+    },
+    case ARDUINO_EVENT_PROV_CRED_FAIL: {
+      Logger::log("ARDUINO_EVENT_PROV_CRED_FAIL");
+      break;
+    },
+    case ARDUINO_EVENT_PROV_CRED_SUCCESS: {
+      Logger::log("ARDUINO_EVENT_PROV_CRED_SUCCESS");
+      break;
+    },
+    case ARDUINO_EVENT_MAX: {
+      Logger::log("ARDUINO_EVENT_MAX");
+      break;
+    },
     default: {
-      Logger::log("UNHANDLED_WIFI_EVENT");
+      Logger::log("ARDUINO_EVENT_UNDEFINED");
     }  
   }
 }
