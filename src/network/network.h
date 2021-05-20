@@ -10,7 +10,7 @@
 class Network
 {
 private:
-  DNSServer dns;
+  // DNSServer dns;
 
 public:
   Network();
