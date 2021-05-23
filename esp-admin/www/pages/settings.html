@@ -1,122 +1,264 @@
-<div class="p-4 md:p-8 divide-y md:divide-y-0">
-  <div class="px-0 pb-4 flex">
-    <h1 class="text-3xl font-semibold text-gray-900 flex-grow">Settings</h1>
-  </div>
-  <!-- <div class="sm:hidden">
-    <label for="tabs" class="sr-only">Select a tab</label>
-    <select id="tabs" name="tabs" class="block w-full focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md">
-      <option>General Information</option>
-
-      <option>Company</option>
-
-      <option selected>Team Members</option>
-
-      <option>Billing</option>
-    </select>
-  </div> -->
+<div x-data="settings()" x-init="information()" class="p-4 md:p-8">
+  <div class="px-0 pb-0 md:pb-4 flex">
+    <h3 class="text-lg leading-6 font-medium text-gray-600">Settings</h3>
+  </div>  
   <div class="block">
     <div class="hidden md:block border-b border-gray-200">
       <nav class="-mb-px flex space-x-8" aria-label="Tabs">
         <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" -->
-        <a href="#" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
+        <a 
+          @click="information()" 
+          href="javascript:;" 
+          x-bind:class="{
+            'border-indigo-500 text-indigo-600': (activeItem === 1), 
+            'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': (activeItem !== 1)
+          }" 
+          class="group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
           <!--
             Heroicon name: solid/user
 
             Current: "text-indigo-500", Default: "text-gray-400 group-hover:text-gray-500"
           -->
-          <svg class="text-gray-400 group-hover:text-gray-500 ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" fill="currentColor" d="M6,4H18V5H21V7H18V9H21V11H18V13H21V15H18V17H21V19H18V20H6V19H3V17H6V15H3V13H6V11H3V9H6V7H3V5H6V4M11,15V18H12V15H11M13,15V18H14V15H13M15,15V18H16V15H15Z" />
+          <svg
+            x-bind:class="{
+              'text-indigo-500': (activeItem === 1), 
+              'text-gray-400 group-hover:text-gray-500': (activeItem !== 1)
+            }" 
+            class="ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" fill="currentColor" d="M12 5.69L17 10.19V18H15V12H9V18H7V10.19L12 5.69M12 3L2 12H5V20H11V14H13V20H19V12H22L12 3Z" />
           </svg>
           <span class="hidden md:block truncate">Information</span>
         </a>
 
-        <a href="#" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
+        <a 
+          @click="configuration()" 
+          href="javascript:;" 
+          x-bind:class="{
+            'border-indigo-500 text-indigo-600': (activeItem === 2), 
+            'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': (activeItem !== 2)
+          }"
+          class="group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
           <!--
             Heroicon name: solid/user
 
             Current: "text-indigo-500", Default: "text-gray-400 group-hover:text-gray-500"
           -->
-          <svg class="text-gray-400 group-hover:text-gray-500 ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" fill="currentColor" d="M6,4H18V5H21V7H18V9H21V11H18V13H21V15H18V17H21V19H18V20H6V19H3V17H6V15H3V13H6V11H3V9H6V7H3V5H6V4M11,15V18H12V15H11M13,15V18H14V15H13M15,15V18H16V15H15Z" />
+          <svg
+            x-bind:class="{
+              'text-indigo-500': (activeItem === 2), 
+              'text-gray-400 group-hover:text-gray-500': (activeItem !== 2)
+            }" 
+            class="ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" fill="currentColor" d="M15.9,18.45C17.25,18.45 18.35,17.35 18.35,16C18.35,14.65 17.25,13.55 15.9,13.55C14.54,13.55 13.45,14.65 13.45,16C13.45,17.35 14.54,18.45 15.9,18.45M21.1,16.68L22.58,17.84C22.71,17.95 22.75,18.13 22.66,18.29L21.26,20.71C21.17,20.86 21,20.92 20.83,20.86L19.09,20.16C18.73,20.44 18.33,20.67 17.91,20.85L17.64,22.7C17.62,22.87 17.47,23 17.3,23H14.5C14.32,23 14.18,22.87 14.15,22.7L13.89,20.85C13.46,20.67 13.07,20.44 12.71,20.16L10.96,20.86C10.81,20.92 10.62,20.86 10.54,20.71L9.14,18.29C9.05,18.13 9.09,17.95 9.22,17.84L10.7,16.68L10.65,16L10.7,15.31L9.22,14.16C9.09,14.05 9.05,13.86 9.14,13.71L10.54,11.29C10.62,11.13 10.81,11.07 10.96,11.13L12.71,11.84C13.07,11.56 13.46,11.32 13.89,11.15L14.15,9.29C14.18,9.13 14.32,9 14.5,9H17.3C17.47,9 17.62,9.13 17.64,9.29L17.91,11.15C18.33,11.32 18.73,11.56 19.09,11.84L20.83,11.13C21,11.07 21.17,11.13 21.26,11.29L22.66,13.71C22.75,13.86 22.71,14.05 22.58,14.16L21.1,15.31L21.15,16L21.1,16.68M6.69,8.07C7.56,8.07 8.26,7.37 8.26,6.5C8.26,5.63 7.56,4.92 6.69,4.92A1.58,1.58 0 0,0 5.11,6.5C5.11,7.37 5.82,8.07 6.69,8.07M10.03,6.94L11,7.68C11.07,7.75 11.09,7.87 11.03,7.97L10.13,9.53C10.08,9.63 9.96,9.67 9.86,9.63L8.74,9.18L8,9.62L7.81,10.81C7.79,10.92 7.7,11 7.59,11H5.79C5.67,11 5.58,10.92 5.56,10.81L5.4,9.62L4.64,9.18L3.5,9.63C3.41,9.67 3.3,9.63 3.24,9.53L2.34,7.97C2.28,7.87 2.31,7.75 2.39,7.68L3.34,6.94L3.31,6.5L3.34,6.06L2.39,5.32C2.31,5.25 2.28,5.13 2.34,5.03L3.24,3.47C3.3,3.37 3.41,3.33 3.5,3.37L4.63,3.82L5.4,3.38L5.56,2.19C5.58,2.08 5.67,2 5.79,2H7.59C7.7,2 7.79,2.08 7.81,2.19L8,3.38L8.74,3.82L9.86,3.37C9.96,3.33 10.08,3.37 10.13,3.47L11.03,5.03C11.09,5.13 11.07,5.25 11,5.32L10.03,6.06L10.06,6.5L10.03,6.94Z" />
           </svg>
           <span class="hidden md:block truncate">Settings</span>
         </a>
 
-        <a href="#" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
+        <a 
+          @click="network()" 
+          href="javascript:;" 
+          x-bind:class="{
+            'border-indigo-500 text-indigo-600': (activeItem === 3), 
+            'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': (activeItem !== 3)
+          }"
+          class="group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
           <!-- Heroicon name: solid/office-building -->
-          <svg class="text-gray-400 group-hover:text-gray-500 ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd" />
+          <svg
+            x-bind:class="{
+              'text-indigo-500': (activeItem === 3), 
+              'text-gray-400 group-hover:text-gray-500': (activeItem !== 3)
+            }" 
+            class="ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" fill="currentColor" d="M4.93,3.93C3.12,5.74 2,8.24 2,11C2,13.76 3.12,16.26 4.93,18.07L6.34,16.66C4.89,15.22 4,13.22 4,11C4,8.79 4.89,6.78 6.34,5.34L4.93,3.93M19.07,3.93L17.66,5.34C19.11,6.78 20,8.79 20,11C20,13.22 19.11,15.22 17.66,16.66L19.07,18.07C20.88,16.26 22,13.76 22,11C22,8.24 20.88,5.74 19.07,3.93M7.76,6.76C6.67,7.85 6,9.35 6,11C6,12.65 6.67,14.15 7.76,15.24L9.17,13.83C8.45,13.11 8,12.11 8,11C8,9.89 8.45,8.89 9.17,8.17L7.76,6.76M16.24,6.76L14.83,8.17C15.55,8.89 16,9.89 16,11C16,12.11 15.55,13.11 14.83,13.83L16.24,15.24C17.33,14.15 18,12.65 18,11C18,9.35 17.33,7.85 16.24,6.76M12,9A2,2 0 0,0 10,11A2,2 0 0,0 12,13A2,2 0 0,0 14,11A2,2 0 0,0 12,9M11,15V19H10A1,1 0 0,0 9,20H2V22H9A1,1 0 0,0 10,23H14A1,1 0 0,0 15,22H22V20H15A1,1 0 0,0 14,19H13V15H11Z" />
           </svg>
           <span class="hidden md:block truncate">Network</span>
         </a>
 
-        <a href="#" class="border-indigo-500 text-indigo-600 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm" aria-current="page">
+        <a 
+          @click="channels()" 
+          href="javascript:;" 
+          x-bind:class="{
+            'border-indigo-500 text-indigo-600': (activeItem === 4), 
+            'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': (activeItem !== 4)
+          }"
+          class="group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm" aria-current="page">
           <!-- Heroicon name: solid/users -->
-          <svg class="text-indigo-500 ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+          <svg
+            x-bind:class="{
+              'text-indigo-500': (activeItem === 4), 
+              'text-gray-400 group-hover:text-gray-500': (activeItem !== 4)
+            }" 
+            class="ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" fill="currentColor" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12C20,14.4 19,16.5 17.3,18C15.9,16.7 14,16 12,16C10,16 8.2,16.7 6.7,18C5,16.5 4,14.4 4,12A8,8 0 0,1 12,4M14,5.89C13.62,5.9 13.26,6.15 13.1,6.54L11.81,9.77L11.71,10C11,10.13 10.41,10.6 10.14,11.26C9.73,12.29 10.23,13.45 11.26,13.86C12.29,14.27 13.45,13.77 13.86,12.74C14.12,12.08 14,11.32 13.57,10.76L13.67,10.5L14.96,7.29L14.97,7.26C15.17,6.75 14.92,6.17 14.41,5.96C14.28,5.91 14.15,5.89 14,5.89M10,6A1,1 0 0,0 9,7A1,1 0 0,0 10,8A1,1 0 0,0 11,7A1,1 0 0,0 10,6M7,9A1,1 0 0,0 6,10A1,1 0 0,0 7,11A1,1 0 0,0 8,10A1,1 0 0,0 7,9M17,9A1,1 0 0,0 16,10A1,1 0 0,0 17,11A1,1 0 0,0 18,10A1,1 0 0,0 17,9Z" />
+          </svg>
+          <span class="hidden md:block truncate">Channels</span>
+        </a>
+
+        <a 
+          @click="cloud()" 
+          href="javascript:;" 
+          x-bind:class="{
+            'border-indigo-500 text-indigo-600': (activeItem === 5), 
+            'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': (activeItem !== 5)
+          }"
+          class="group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
+          <!-- Heroicon name: solid/credit-card -->          
+          <svg
+            x-bind:class="{
+              'text-indigo-500': (activeItem === 5), 
+              'text-gray-400 group-hover:text-gray-500': (activeItem !== 5)
+            }" 
+            class="ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" fill="currentColor" d="M19 12V13.5C21.21 13.5 23 15.29 23 17.5C23 18.32 22.75 19.08 22.33 19.71L21.24 18.62C21.41 18.28 21.5 17.9 21.5 17.5C21.5 16.12 20.38 15 19 15V16.5L16.75 14.25L16.72 14.22C16.78 14.17 16.85 14.13 19 12M19 23V21.5C16.79 21.5 15 19.71 15 17.5C15 16.68 15.25 15.92 15.67 15.29L16.76 16.38C16.59 16.72 16.5 17.1 16.5 17.5C16.5 18.88 17.62 20 19 20V18.5L21.25 20.75L21.28 20.78C21.22 20.83 21.15 20.87 19 23M13.03 18H6C3.79 18 2 16.21 2 14S3.79 10 6 10H6.71C7.37 7.69 9.5 6 12 6C15 6 17.4 8.37 17.5 11.32C18.12 11.11 18.8 11 19.5 11C20.78 11 21.97 11.38 23 12C22.13 10.9 20.84 10.14 19.35 10.03C18.67 6.59 15.64 4 12 4C9.11 4 6.6 5.64 5.35 8.03C2.34 8.36 0 10.9 0 14C0 17.31 2.69 20 6 20H13.5C13.24 19.38 13.08 18.7 13.03 18Z" />
           </svg>
           <span class="hidden md:block truncate">Cloud</span>
         </a>
-
-        <a href="#" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
-          <!-- Heroicon name: solid/credit-card -->          
-          <svg class="text-gray-400 group-hover:text-gray-500 ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" fill="currentColor" d="M19 12V13.5C21.21 13.5 23 15.29 23 17.5C23 18.32 22.75 19.08 22.33 19.71L21.24 18.62C21.41 18.28 21.5 17.9 21.5 17.5C21.5 16.12 20.38 15 19 15V16.5L16.75 14.25L16.72 14.22C16.78 14.17 16.85 14.13 19 12M19 23V21.5C16.79 21.5 15 19.71 15 17.5C15 16.68 15.25 15.92 15.67 15.29L16.76 16.38C16.59 16.72 16.5 17.1 16.5 17.5C16.5 18.88 17.62 20 19 20V18.5L21.25 20.75L21.28 20.78C21.22 20.83 21.15 20.87 19 23M13.03 18H6C3.79 18 2 16.21 2 14S3.79 10 6 10H6.71C7.37 7.69 9.5 6 12 6C15 6 17.4 8.37 17.5 11.32C18.12 11.11 18.8 11 19.5 11C20.78 11 21.97 11.38 23 12C22.13 10.9 20.84 10.14 19.35 10.03C18.67 6.59 15.64 4 12 4C9.11 4 6.6 5.64 5.35 8.03C2.34 8.36 0 10.9 0 14C0 17.31 2.69 20 6 20H13.5C13.24 19.38 13.08 18.7 13.03 18Z" />
-          </svg>
-          <span class="hidden md:block truncate">Billing</span>
-        </a>
       </nav>
     </div>
+
+    <div id="settings-container" class="pb-16 md:pb-0"></div>
   </div>
+  <nav class="md:hidden fixed pb-0 px-4 w-full bottom-0 left-0 flex justify-between z-40 bg-white" aria-label="Tabs">
+    <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" -->
+    <a   
+      @click="information()" 
+      href="javascript:;" 
+      x-bind:class="{
+        'border-indigo-500 text-indigo-600': (activeItem === 1), 
+        'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': (activeItem !== 1)
+      }"
+      class="flex-1 justify-center group inline-flex items-center py-2 px-1 border-b-2 font-medium text-sm" aria-current="page">
+      <!--
+        Heroicon name: solid/user
+  
+        Current: "text-indigo-500", Default: "text-gray-400 group-hover:text-gray-500"
+      -->
+      <svg
+        x-bind:class="{
+          'text-indigo-500': (activeItem === 1), 
+          'text-gray-400 group-hover:text-gray-500': (activeItem !== 1)
+        }" 
+        class="ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" fill="currentColor" d="M12 5.69L17 10.19V18H15V12H9V18H7V10.19L12 5.69M12 3L2 12H5V20H11V14H13V20H19V12H22L12 3Z" />
+      </svg>
+      <span class="hidden md:block truncate">Information</span>
+    </a>
+  
+    <a 
+      @click="configuration()" 
+      href="javascript:;"
+      x-bind:class="{
+        'border-indigo-500 text-indigo-600': (activeItem === 2), 
+        'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': (activeItem !== 2)
+      }"  
+      class="flex-1 justify-center group inline-flex items-center py-2 px-1 border-b-2 font-medium text-sm">
+      <!--
+        Heroicon name: solid/user
+  
+        Current: "text-indigo-500", Default: "text-gray-400 group-hover:text-gray-500"
+      -->
+      <svg
+        x-bind:class="{
+          'text-indigo-500': (activeItem === 2), 
+          'text-gray-400 group-hover:text-gray-500': (activeItem !== 2)
+        }" 
+        class="ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" fill="currentColor" d="M15.9,18.45C17.25,18.45 18.35,17.35 18.35,16C18.35,14.65 17.25,13.55 15.9,13.55C14.54,13.55 13.45,14.65 13.45,16C13.45,17.35 14.54,18.45 15.9,18.45M21.1,16.68L22.58,17.84C22.71,17.95 22.75,18.13 22.66,18.29L21.26,20.71C21.17,20.86 21,20.92 20.83,20.86L19.09,20.16C18.73,20.44 18.33,20.67 17.91,20.85L17.64,22.7C17.62,22.87 17.47,23 17.3,23H14.5C14.32,23 14.18,22.87 14.15,22.7L13.89,20.85C13.46,20.67 13.07,20.44 12.71,20.16L10.96,20.86C10.81,20.92 10.62,20.86 10.54,20.71L9.14,18.29C9.05,18.13 9.09,17.95 9.22,17.84L10.7,16.68L10.65,16L10.7,15.31L9.22,14.16C9.09,14.05 9.05,13.86 9.14,13.71L10.54,11.29C10.62,11.13 10.81,11.07 10.96,11.13L12.71,11.84C13.07,11.56 13.46,11.32 13.89,11.15L14.15,9.29C14.18,9.13 14.32,9 14.5,9H17.3C17.47,9 17.62,9.13 17.64,9.29L17.91,11.15C18.33,11.32 18.73,11.56 19.09,11.84L20.83,11.13C21,11.07 21.17,11.13 21.26,11.29L22.66,13.71C22.75,13.86 22.71,14.05 22.58,14.16L21.1,15.31L21.15,16L21.1,16.68M6.69,8.07C7.56,8.07 8.26,7.37 8.26,6.5C8.26,5.63 7.56,4.92 6.69,4.92A1.58,1.58 0 0,0 5.11,6.5C5.11,7.37 5.82,8.07 6.69,8.07M10.03,6.94L11,7.68C11.07,7.75 11.09,7.87 11.03,7.97L10.13,9.53C10.08,9.63 9.96,9.67 9.86,9.63L8.74,9.18L8,9.62L7.81,10.81C7.79,10.92 7.7,11 7.59,11H5.79C5.67,11 5.58,10.92 5.56,10.81L5.4,9.62L4.64,9.18L3.5,9.63C3.41,9.67 3.3,9.63 3.24,9.53L2.34,7.97C2.28,7.87 2.31,7.75 2.39,7.68L3.34,6.94L3.31,6.5L3.34,6.06L2.39,5.32C2.31,5.25 2.28,5.13 2.34,5.03L3.24,3.47C3.3,3.37 3.41,3.33 3.5,3.37L4.63,3.82L5.4,3.38L5.56,2.19C5.58,2.08 5.67,2 5.79,2H7.59C7.7,2 7.79,2.08 7.81,2.19L8,3.38L8.74,3.82L9.86,3.37C9.96,3.33 10.08,3.37 10.13,3.47L11.03,5.03C11.09,5.13 11.07,5.25 11,5.32L10.03,6.06L10.06,6.5L10.03,6.94Z" />
+      </svg>
+      <span class="hidden md:block truncate">Settings</span>
+    </a>
+  
+    <a 
+      @click="network()" 
+      href="javascript:;"
+      x-bind:class="{
+        'border-indigo-500 text-indigo-600': (activeItem === 3), 
+        'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': (activeItem !== 3)
+      }"  
+      class="flex-1 justify-center group inline-flex items-center py-2 px-1 border-b-2 font-medium text-sm">
+      <!-- Heroicon name: solid/office-building -->
+      <svg
+        x-bind:class="{
+          'text-indigo-500': (activeItem === 3), 
+          'text-gray-400 group-hover:text-gray-500': (activeItem !== 3)
+        }" 
+        class="ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" fill="currentColor" d="M4.93,3.93C3.12,5.74 2,8.24 2,11C2,13.76 3.12,16.26 4.93,18.07L6.34,16.66C4.89,15.22 4,13.22 4,11C4,8.79 4.89,6.78 6.34,5.34L4.93,3.93M19.07,3.93L17.66,5.34C19.11,6.78 20,8.79 20,11C20,13.22 19.11,15.22 17.66,16.66L19.07,18.07C20.88,16.26 22,13.76 22,11C22,8.24 20.88,5.74 19.07,3.93M7.76,6.76C6.67,7.85 6,9.35 6,11C6,12.65 6.67,14.15 7.76,15.24L9.17,13.83C8.45,13.11 8,12.11 8,11C8,9.89 8.45,8.89 9.17,8.17L7.76,6.76M16.24,6.76L14.83,8.17C15.55,8.89 16,9.89 16,11C16,12.11 15.55,13.11 14.83,13.83L16.24,15.24C17.33,14.15 18,12.65 18,11C18,9.35 17.33,7.85 16.24,6.76M12,9A2,2 0 0,0 10,11A2,2 0 0,0 12,13A2,2 0 0,0 14,11A2,2 0 0,0 12,9M11,15V19H10A1,1 0 0,0 9,20H2V22H9A1,1 0 0,0 10,23H14A1,1 0 0,0 15,22H22V20H15A1,1 0 0,0 14,19H13V15H11Z" />
+      </svg>
+      <span class="hidden md:block truncate">Network</span>
+    </a>
+  
+    <a 
+      @click="channels()" 
+      href="javascript:;"
+      x-bind:class="{
+        'border-indigo-500 text-indigo-600': (activeItem === 4), 
+        'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': (activeItem !== 4)
+      }"  
+      class="flex-1 justify-center group inline-flex items-center py-2 px-1 border-b-2 font-medium text-sm">
+      <!-- Heroicon name: solid/users -->
+      <svg 
+        x-bind:class="{
+          'text-indigo-500': (activeItem === 4), 
+          'text-gray-400 group-hover:text-gray-500': (activeItem !== 4)
+        }"
+        class="ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" fill="currentColor" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12C20,14.4 19,16.5 17.3,18C15.9,16.7 14,16 12,16C10,16 8.2,16.7 6.7,18C5,16.5 4,14.4 4,12A8,8 0 0,1 12,4M14,5.89C13.62,5.9 13.26,6.15 13.1,6.54L11.81,9.77L11.71,10C11,10.13 10.41,10.6 10.14,11.26C9.73,12.29 10.23,13.45 11.26,13.86C12.29,14.27 13.45,13.77 13.86,12.74C14.12,12.08 14,11.32 13.57,10.76L13.67,10.5L14.96,7.29L14.97,7.26C15.17,6.75 14.92,6.17 14.41,5.96C14.28,5.91 14.15,5.89 14,5.89M10,6A1,1 0 0,0 9,7A1,1 0 0,0 10,8A1,1 0 0,0 11,7A1,1 0 0,0 10,6M7,9A1,1 0 0,0 6,10A1,1 0 0,0 7,11A1,1 0 0,0 8,10A1,1 0 0,0 7,9M17,9A1,1 0 0,0 16,10A1,1 0 0,0 17,11A1,1 0 0,0 18,10A1,1 0 0,0 17,9Z" />
+      </svg>
+      <span class="hidden md:block truncate">Channels</span>
+    </a>
+  
+    <a 
+      @click="cloud()" 
+      href="javascript:;"
+      x-bind:class="{
+        'border-indigo-500 text-indigo-600': (activeItem === 5), 
+        'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': (activeItem !== 5)
+      }"  
+      class="flex-1 justify-center group inline-flex items-center py-2 px-1 border-b-2 font-medium text-sm">
+      <!-- Heroicon name: solid/credit-card -->          
+      <svg
+        x-bind:class="{
+          'text-indigo-500': (activeItem === 5), 
+          'text-gray-400 group-hover:text-gray-500': (activeItem !== 5)
+        }" 
+        class="ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" fill="currentColor" d="M19 12V13.5C21.21 13.5 23 15.29 23 17.5C23 18.32 22.75 19.08 22.33 19.71L21.24 18.62C21.41 18.28 21.5 17.9 21.5 17.5C21.5 16.12 20.38 15 19 15V16.5L16.75 14.25L16.72 14.22C16.78 14.17 16.85 14.13 19 12M19 23V21.5C16.79 21.5 15 19.71 15 17.5C15 16.68 15.25 15.92 15.67 15.29L16.76 16.38C16.59 16.72 16.5 17.1 16.5 17.5C16.5 18.88 17.62 20 19 20V18.5L21.25 20.75L21.28 20.78C21.22 20.83 21.15 20.87 19 23M13.03 18H6C3.79 18 2 16.21 2 14S3.79 10 6 10H6.71C7.37 7.69 9.5 6 12 6C15 6 17.4 8.37 17.5 11.32C18.12 11.11 18.8 11 19.5 11C20.78 11 21.97 11.38 23 12C22.13 10.9 20.84 10.14 19.35 10.03C18.67 6.59 15.64 4 12 4C9.11 4 6.6 5.64 5.35 8.03C2.34 8.36 0 10.9 0 14C0 17.31 2.69 20 6 20H13.5C13.24 19.38 13.08 18.7 13.03 18Z" />
+      </svg>
+      <span class="hidden md:block truncate">Cloud</span>
+    </a>
+  </nav>
 </div>
 
-<nav class="md:hidden fixed px-4 w-full bottom-0 left-0 flex justify-between z-50" aria-label="Tabs">
-  <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" -->
-  <a href="#" class="flex-1 justify-center border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-2 px-1 border-b-2 font-medium text-sm" aria-current="page">
-    <!--
-      Heroicon name: solid/user
-
-      Current: "text-indigo-500", Default: "text-gray-400 group-hover:text-gray-500"
-    -->
-    <svg class="text-gray-400 group-hover:text-gray-500 ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path fill-rule="evenodd" fill="currentColor" d="M6,4H18V5H21V7H18V9H21V11H18V13H21V15H18V17H21V19H18V20H6V19H3V17H6V15H3V13H6V11H3V9H6V7H3V5H6V4M11,15V18H12V15H11M13,15V18H14V15H13M15,15V18H16V15H15Z" />
-    </svg>
-    <span class="hidden md:block truncate">Information</span>
-  </a>
-
-  <a href="#" class="flex-1 justify-center border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-2 px-1 border-b-2 font-medium text-sm">
-    <!--
-      Heroicon name: solid/user
-
-      Current: "text-indigo-500", Default: "text-gray-400 group-hover:text-gray-500"
-    -->
-    <svg class="text-gray-400 group-hover:text-gray-500 ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path fill-rule="evenodd" fill="currentColor" d="M6,4H18V5H21V7H18V9H21V11H18V13H21V15H18V17H21V19H18V20H6V19H3V17H6V15H3V13H6V11H3V9H6V7H3V5H6V4M11,15V18H12V15H11M13,15V18H14V15H13M15,15V18H16V15H15Z" />
-    </svg>
-    <span class="hidden md:block truncate">Settings</span>
-  </a>
-
-  <a href="#" class="flex-1 justify-center border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-2 px-1 border-b-2 font-medium text-sm">
-    <!-- Heroicon name: solid/office-building -->
-    <svg class="text-gray-400 group-hover:text-gray-500 ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd" />
-    </svg>
-    <span class="hidden md:block truncate">Network</span>
-  </a>
-
-  <a href="#" class="border-indigo-500 flex-1 justify-center border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-2 px-1 border-b-2 font-medium text-sm">
-    <!-- Heroicon name: solid/users -->
-    <svg class="text-indigo-500 ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-    </svg>
-    <span class="hidden md:block truncate">Cloud</span>
-  </a>
-
-  <a href="#" class="flex-1 justify-center border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-2 px-1 border-b-2 font-medium text-sm">
-    <!-- Heroicon name: solid/credit-card -->          
-    <svg class="text-gray-400 group-hover:text-gray-500 ml-0 mr-0 md:-ml-0.5 md:mr-2 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path fill-rule="evenodd" fill="currentColor" d="M19 12V13.5C21.21 13.5 23 15.29 23 17.5C23 18.32 22.75 19.08 22.33 19.71L21.24 18.62C21.41 18.28 21.5 17.9 21.5 17.5C21.5 16.12 20.38 15 19 15V16.5L16.75 14.25L16.72 14.22C16.78 14.17 16.85 14.13 19 12M19 23V21.5C16.79 21.5 15 19.71 15 17.5C15 16.68 15.25 15.92 15.67 15.29L16.76 16.38C16.59 16.72 16.5 17.1 16.5 17.5C16.5 18.88 17.62 20 19 20V18.5L21.25 20.75L21.28 20.78C21.22 20.83 21.15 20.87 19 23M13.03 18H6C3.79 18 2 16.21 2 14S3.79 10 6 10H6.71C7.37 7.69 9.5 6 12 6C15 6 17.4 8.37 17.5 11.32C18.12 11.11 18.8 11 19.5 11C20.78 11 21.97 11.38 23 12C22.13 10.9 20.84 10.14 19.35 10.03C18.67 6.59 15.64 4 12 4C9.11 4 6.6 5.64 5.35 8.03C2.34 8.36 0 10.9 0 14C0 17.31 2.69 20 6 20H13.5C13.24 19.38 13.08 18.7 13.03 18Z" />
-    </svg>
-    <span class="hidden md:block truncate">Billing</span>
-  </a>
-</nav>
+<script>
+  function settings() {
+    return {
+      activeItem: 0,
+      load(uri, index) {
+        showLoading();
+        fetch("./pages/" + uri)
+          .then(response => response.text())
+          .then(html => {
+            setHtml(document.getElementById("settings-container"), html);
+            hideLoading();
+            this.activeItem = index;
+          });
+      },      
+      information() {
+        this.load("_info.html", 1)
+      },
+      configuration() {
+        this.load("_conf.html", 2)
+      },
+      network() {
+        this.load("_net.html", 3)
+      },
+      channels() {
+        this.load("_chnls.html", 4)
+      },
+      cloud() {
+        this.load("_cloud.html", 5)
+      }
+    }
+  }
+</script>

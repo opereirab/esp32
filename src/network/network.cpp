@@ -20,6 +20,19 @@ void Network::onEvent(system_event_id_t event, system_event_info_t info)
       break;
     }
     case SYSTEM_EVENT_SCAN_DONE: {
+      Serial.printf("SYSTEM_EVENT_SCAN_DONE: %d", info.scan_done.number);
+      const size_t capacity = info.scan_done.number;
+      DynamicJsonDocument doc(JSON_OBJECT_SIZE(2) + JSON_ARRAY_SIZE(capacity) + capacity * JSON_OBJECT_SIZE(3) + 210);
+      doc["cmd"] = RESPONSE_SYSTEM_EVENT_SCAN_DONE;
+      JsonArray networks = doc.createNestedArray("networks");
+      for(int i = 0; i < capacity; i++) {
+        JsonObject net = networks.createNestedObject();
+        net["ssid"] = WiFi.SSID(i);
+        net["rssi"] = WiFi.RSSI(i);
+        net["ch"] = WiFi.channel(i);
+      }
+      webserver.sendEvent(RESPONSE_SYSTEM_EVENT_SCAN_DONE, doc);
+      doc.clear();
       break;
     }
     case SYSTEM_EVENT_STA_START: {
@@ -107,7 +120,7 @@ void Network::onEvent(system_event_id_t event, system_event_info_t info)
       break;
     }    
     default: {
-      Logger::log("ARDUINO_EVENT_UNDEFINED"); 
+      Logger::log("SYSTEM_WIFI_EVENT_UNDEFINED"); 
       break;
     }
   }

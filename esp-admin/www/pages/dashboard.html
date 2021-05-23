@@ -472,9 +472,9 @@
     return {
       model: null,
       init() {
-        fetch("/command", {
+        fetch(url + "/command?dummy=" + Date.now(), {
           method: "POST",
-          body: JSON.stringify({ cmd: 1 })
+          body: JSON.stringify({ cmd: CommandType.REQUEST_DEVICE_SETTINGS })
         })
         .then(response => response.json())
         .then(data => {

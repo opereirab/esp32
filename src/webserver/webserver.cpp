@@ -51,8 +51,9 @@ void Webserver::routes() {
       payload += (char)data[i];  
     }
     if(payload.length() < total) return;
-    
+    Serial.println(payload);
     String resp = cmdprocessor.process(payload, total);
+    payload.clear();
     Serial.println(resp);
     request->send(200, "application/json", resp);   
   });
@@ -84,7 +85,10 @@ void Webserver::setup()
   routes();
 
   // attach filesystem root at URL /fs
-  server.serveStatic("/", SPIFFS, "/www/").setIsDir(true).setDefaultFile("index.html");
+  server
+    .serveStatic("/", SPIFFS, "/www/")
+    .setIsDir(true)
+    .setDefaultFile("index.html");
   
   // Catch-All Handlers
   // Any request that can not find a Handler that canHandle it
