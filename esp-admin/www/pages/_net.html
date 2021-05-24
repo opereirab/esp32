@@ -17,7 +17,7 @@
           <div class="flex flex-col md:flex-row w-full mx-auto xl:px-8">            
             <div class="flex-1 flex flex-col bg-white divide-y mx-3">
               <h3>Connect to Netowrk</h3>
-              <form class="pt-2 space-y-3">
+              <form action="#" method="POST" class="pt-2 space-y-3" @submit="onSubmitWifi($event)">
                 <div>
                   <label for="wifi_ssid" class="block text-sm font-medium text-gray-700">SSID</label>
                   <div class="mt-1 relative">
@@ -27,7 +27,7 @@
                       type="button" class="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label">
                       <div class="flex items-center">
                         <!-- On: "bg-green-400", Off: "bg-gray-200" -->
-                        <span x-bind:class="signal(model.wifi.rssi)" aria-label="Online" class="flex-shrink-0 inline-block h-2 w-2 rounded-full"></span>
+                        <span x-ref="signalStrench" x-bind:class="modelSignal($refs)" aria-label="Online" class="bg-gray-200 flex-shrink-0 inline-block h-2 w-2 rounded-full"></span>
                         <span x-text="model.wifi.ssid" class="ml-3 block truncate">
                           <!-- Tom Cook -->
                         </span>
@@ -176,7 +176,7 @@
           <div class="flex flex-col md:flex-row w-full mx-auto xl:px-8">            
             <div class="flex-1 flex flex-col bg-white divide-y mx-3">
               <h3>Local Netowrk</h3>
-              <form class="pt-2 space-y-3">
+              <form action="#" method="POST" class="pt-2 space-y-3" @submit="onSubmitAp($event)">
                 <div>
                   <label for="ap_ssid" class="block text-sm font-medium text-gray-700">SSID</label>
                   <div class="mt-1">
@@ -263,6 +263,21 @@
       selectItem(event, item, index) {
         this.model.wifi = Object.assign(this.model.wifi, this.networks[index]);
       },
+      modelSignal(refs) {
+        
+        for(var i = refs.signalStrench.classList.length - 1; i >= 0; i--) {
+          if(refs.signalStrench.classList[i].match(/bg-*/i)) {
+            refs.signalStrench.classList.remove(refs.signalStrench.classList[i]);
+          }
+        }
+
+        var newClassObj = this.signal(this.model.wifi.rssi);
+        var key = Object.keys(newClassObj)[0];
+        
+        refs.signalStrench.classList.add(key);
+
+        return {};
+      },
       signal(rssi) {
         if(rssi >= -50) {
           return {
@@ -288,10 +303,37 @@
           return {
             'bg-red-600': true
           }
+        } else if(rssi !== undefined) {
+          return {
+            'bg-red-900': true
+          }
         }
+        
         return {
-          'bg-red-900': true
+          'bg-gray-200': true
         }
+      },
+      onSubmitWifi(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        console.log({
+          wifi: {
+            ssid: this.model.wifi.ssid,
+            password: this.model.wifi.password || ''
+          }
+        });
+      },
+      onSubmitAp(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        console.log({
+          ap: {
+            ssid: this.model.ap.ssid,
+            password: this.model.ap.password || ''
+          }
+        });
       }
     }
   }
