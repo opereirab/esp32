@@ -18,8 +18,11 @@ CmdProcessor::~CmdProcessor()
 String CmdProcessor::process(const String& payload, size_t length) {
   String output = "";
   
+  StaticJsonDocument <16> filter;
+  filter["cmd"] = true;
+  
   StaticJsonDocument<32> req;
-  DeserializationError e = deserializeJson(req, payload.c_str());
+  DeserializationError e = deserializeJson(req, payload.c_str(), DeserializationOption::Filter(filter));
   if(e != DeserializationError::Ok) {
     return output;
   }
@@ -67,6 +70,41 @@ String CmdProcessor::process(const String& payload, size_t length) {
       wifi["rssi"] = WiFi.RSSI();
 
       serializeJson(resp, output);      
+      break;
+    }
+    case CommandType::REQUEST_SAVE_WIFI_SETTINGS: {
+      StaticJsonDocument <16> dataFilter;
+      dataFilter["data"] = true;
+
+      StaticJsonDocument<192> doc;
+      DeserializationError e = deserializeJson(doc, payload.c_str(), DeserializationOption::Filter(dataFilter));
+      if(e != DeserializationError::Ok) {
+        return output;
+      }
+
+      JsonObject data = doc["data"].as<JsonObject>();
+      strcpy(settings.network.ssid, data["ssid"]);
+      strcpy(settings.network.password, data["password"]);
+      if(settings.network.save()) {
+        serializeJson(doc, output);
+      }
+      break;
+    }
+    case CommandType::REQUEST_SAVE_AP_SETTINGS: {
+      StaticJsonDocument <16> dataFilter;
+      dataFilter["data"] = true;
+
+      StaticJsonDocument<96> doc;
+      DeserializationError e = deserializeJson(doc, payload.c_str(), DeserializationOption::Filter(dataFilter));
+      if(e != DeserializationError::Ok) {
+        return output;
+      }
+
+      JsonObject data = doc["data"].as<JsonObject>();
+      strcpy(settings.network.passphrase, data["password"]);
+      if(settings.network.save()) {
+        serializeJson(doc, output);
+      }
       break;
     }
     default:

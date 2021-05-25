@@ -19,7 +19,7 @@ struct NetworkSettings
 {
   char ssid[33] = { '\0' };
   char password[64] = { '\0' };
-  char passpharse[64] = { '\0' };
+  char passphrase[64] = { '\0' };
 
   IPAddress staIP() {
     return WiFi.localIP();
@@ -73,15 +73,15 @@ struct NetworkSettings
     if (File file = filesystem.open(DB_PATH + "/network.json")) {
       StaticJsonDocument<256> doc;
       DeserializationError e = deserializeJson(doc, file);
-      if(e != DeserializationError::Ok) {
+      if(e == DeserializationError::Ok) {
         strcpy(ssid, doc["ssid"] | DEFAULT_STA_WIFI_SSID);
         strcpy(password, doc["password"] | DEFAULT_STA_WIFI_PASSWORD);
-        strcpy(passpharse, doc["passpharse"] | DEFAULT_AP_WIFI_PASSWORD);        
+        strcpy(passphrase, doc["passphrase"] | DEFAULT_AP_WIFI_PASSWORD);        
         result = true;
       } else {
         strcpy(ssid, DEFAULT_STA_WIFI_SSID);
         strcpy(password, DEFAULT_STA_WIFI_PASSWORD);
-        strcpy(passpharse, DEFAULT_AP_WIFI_PASSWORD); 
+        strcpy(passphrase, DEFAULT_AP_WIFI_PASSWORD); 
         result = false;
       }
       file.close();      
@@ -98,7 +98,8 @@ struct NetworkSettings
       StaticJsonDocument<256> doc;
       doc["ssid"] = ssid;
       doc["password"] = password;
-      doc["passpharse"] = passpharse;
+      doc["passphrase"] = passphrase;
+      
       size_t size = serializeJson(doc, file);
       file.close();
       result = (size > 0);
