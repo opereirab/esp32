@@ -6,6 +6,7 @@
 
 #include "network/network.h"
 #include "webserver/webserver.h"
+#include "channels/channelsmanager.h"
 
 
 void setup() {
@@ -17,6 +18,7 @@ void setup() {
   settings.setup();
   network.setup();
   webserver.setup();
+  mng.setup();
 }
 
 void loop() {
@@ -26,6 +28,8 @@ void loop() {
   doc["cmd"] = 0;
   doc["time"] = systemclock.getTime();
   webserver.sendEvent(CommandType::UNKNOW, doc);
+
+  mng.loop();
 
   yield();
 }

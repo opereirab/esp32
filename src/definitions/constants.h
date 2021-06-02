@@ -17,4 +17,7 @@
 
 #define DEFAULT_HTTP_PORT 80
 
+#define MAX_SENSORS_TYPES 10
+#define MAX_CHANNELS 10
+
 #endif

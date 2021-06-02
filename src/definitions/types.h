@@ -2,7 +2,8 @@
 #define _TYPES_H_
 
 enum SensorType {
-  UNDEFINED = 0
+  SENSOR_TYPE_UNDEFINED       = 0,
+  SENSOR_TYPE_PZEM            = 255
 };
 
 #endif

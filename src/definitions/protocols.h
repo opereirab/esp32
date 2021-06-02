@@ -2,7 +2,16 @@
 #define _PROTOCOL_H_
 
 enum ProtocolType {
-  UNDFINED = 0
-}
+  PROTOCOL_TYPE_NONE    = 0,
+  PROTOCOL_TYPE_HTTP    = 1,
+  PROTOCOL_TYPE_HTTPS   = 2,
+  PROTOCOL_TYPE_WS      = 3,
+  PROTOCOL_TYPE_WSS     = 4,
+  PROTOCOL_TYPE_TCP     = 5,
+  PROTOCOL_TYPE_UDP     = 6,
+  PROTOCOL_TYPE_MQTT    = 7,
+  PROTOCOL_TYPE_SERIAL  = 8,
+  PROTOCOL_TYPE_MODBUS  = 9,
+};
 
 #endif
