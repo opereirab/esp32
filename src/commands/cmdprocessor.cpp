@@ -81,7 +81,7 @@ String CmdProcessor::process(const String& payload, size_t length) {
       }
 
       output = "{ \"deviceId\": \"" + settings.device.serialNum() + "\",\"channels\":" + file.readString() + "}";
-      // output = file.readString(); 
+      file.close(); 
       break;
     }
     case CommandType::REQUEST_SENSORS_TYPES: {
@@ -90,7 +90,8 @@ String CmdProcessor::process(const String& payload, size_t length) {
         return output;
       }
 
-      output = file.readString(); 
+      output = file.readString();
+      file.close(); 
       break;
     }
     case CommandType::REQUEST_SENSORS_FUNCTIONS: {
@@ -99,7 +100,8 @@ String CmdProcessor::process(const String& payload, size_t length) {
         return output;
       }
 
-      output = file.readString(); 
+      output = file.readString();
+      file.close(); 
       break;
     }
 
@@ -138,9 +140,37 @@ String CmdProcessor::process(const String& payload, size_t length) {
       }
       break;
     }
-    
-    default:
+    case CommandType::REQUEST_SAVE_DEVICE_CHANNELS: {
+      StaticJsonDocument <16> dataFilter;
+      dataFilter["data"] = true;
+
+      const size_t capacity = JSON_ARRAY_SIZE(MAX_CHANNELS) + MAX_CHANNELS*(JSON_ARRAY_SIZE(3) +  + 10*JSON_OBJECT_SIZE(9));
+      DynamicJsonDocument doc(capacity);
+      DeserializationError e = deserializeJson(doc, payload.c_str(), DeserializationOption::Filter(dataFilter));
+      if(e != DeserializationError::Ok) {
+        return output;
+      }
+      
+      if(filesystem.exists(DB_PATH + "/channels.json")) {
+        filesystem.remove(DB_PATH + "/channels.json");
+      }
+
+      File file = filesystem.open(DB_PATH + "/channels.json", "w");
+      if(!file) {
+        Serial.println("Error opening faild");
+        return output;
+      }
+
+      serializeJson(doc, file);
+      
+      output = file.readString();
+      file.close();
+      doc.clear();
+
       break;
+    }
+    
+    default: break;
   }
 
   return output;

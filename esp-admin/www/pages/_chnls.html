@@ -208,6 +208,7 @@
             })
             .then(response => response.json())
             .then(data => {
+              console.log(data);
               this.model.deviceId = data.deviceId;
               this.model.channels = data.channels;
               hideLoading();
@@ -238,7 +239,19 @@
         this.update();
       },
       update() {
-
+        showLoading();
+        fetch(url + "/command", {
+          method: "POST",
+          body: JSON.stringify({ 
+            cmd: CommandType.REQUEST_SAVE_DEVICE_CHANNELS, 
+            data: this.model.channels 
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          hideLoading();
+        });
       }
     }
   }
