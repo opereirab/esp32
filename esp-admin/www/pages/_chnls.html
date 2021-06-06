@@ -231,10 +231,12 @@
         return _types;
       },
       selectedSensor(i, s) {
+        this.model.channels[i].id = this.uuid();
         this.model.channels[i].type = s.id;
         this.update();
       },
       clearSensor(i) {
+        this.model.channels[i].id = null;
         this.model.channels[i].type = null;
         this.update();
       },

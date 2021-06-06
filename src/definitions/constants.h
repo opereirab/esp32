@@ -19,5 +19,6 @@
 
 #define MAX_SENSORS_TYPES 10
 #define MAX_CHANNELS 10
+#define MAX_SENSOR_TYPES_X_CHANNELS 5
 
 #endif

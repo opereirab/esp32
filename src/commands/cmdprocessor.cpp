@@ -144,7 +144,7 @@ String CmdProcessor::process(const String& payload, size_t length) {
       StaticJsonDocument <16> dataFilter;
       dataFilter["data"] = true;
 
-      const size_t capacity = JSON_ARRAY_SIZE(MAX_CHANNELS) + MAX_CHANNELS*(JSON_ARRAY_SIZE(3) +  + 10*JSON_OBJECT_SIZE(9));
+      const size_t capacity = JSON_ARRAY_SIZE(MAX_CHANNELS) + MAX_CHANNELS*(JSON_ARRAY_SIZE(MAX_SENSOR_TYPES_X_CHANNELS) +  + 10*JSON_OBJECT_SIZE(9));
       DynamicJsonDocument doc(capacity);
       DeserializationError e = deserializeJson(doc, payload.c_str(), DeserializationOption::Filter(dataFilter));
       if(e != DeserializationError::Ok) {
@@ -161,11 +161,14 @@ String CmdProcessor::process(const String& payload, size_t length) {
         return output;
       }
 
-      serializeJson(doc, file);
-      
-      output = file.readString();
-      file.close();
+      serializeJson(doc["data"], file);
       doc.clear();
+      
+      file.close();
+      if(file = filesystem.open(DB_PATH + "/channels.json")) {
+        output = file.readString();
+        file.close();
+      }
 
       break;
     }
