@@ -1,6 +1,7 @@
 #include "cmdprocessor.h"
 #include "cmds.h"
 #include "settings/settings.h"
+#include "channels/channelsmanager.h"
 
 #include <WiFi.h>
 #include <ArduinoJson.h>
@@ -72,6 +73,36 @@ String CmdProcessor::process(const String& payload, size_t length) {
       serializeJson(resp, output);      
       break;
     }
+    case CommandType::REQUEST_CHANNELS: {
+
+      File file = filesystem.open(DB_PATH + "/channels.json");
+      if(!file) {
+        return output;
+      }
+
+      output = "{ \"deviceId\": \"" + settings.device.serialNum() + "\",\"channels\":" + file.readString() + "}";
+      // output = file.readString(); 
+      break;
+    }
+    case CommandType::REQUEST_SENSORS_TYPES: {
+      File file = filesystem.open(DB_PATH + "/types.json");
+      if(!file) {
+        return output;
+      }
+
+      output = file.readString(); 
+      break;
+    }
+    case CommandType::REQUEST_SENSORS_FUNCTIONS: {
+      File file = filesystem.open(DB_PATH + "/functions.json");
+      if(!file) {
+        return output;
+      }
+
+      output = file.readString(); 
+      break;
+    }
+
     case CommandType::REQUEST_SAVE_WIFI_SETTINGS: {
       StaticJsonDocument <16> dataFilter;
       dataFilter["data"] = true;
@@ -107,6 +138,7 @@ String CmdProcessor::process(const String& payload, size_t length) {
       }
       break;
     }
+    
     default:
       break;
   }

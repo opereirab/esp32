@@ -9,21 +9,28 @@
         </div>
       </div>
       <ul class="divide-y divide-gray-200">
-        <li>
-          <a href="#" class="block hover:bg-gray-50">
+        <template x-for="(ch, index) in model.channels" :key="index">
+          <li>            
             <div class="px-4 py-4 sm:px-6">
               <div class="flex items-center justify-between">
-                <p class="text-sm font-medium text-indigo-600 truncate">
-                  Back End Developer
+                <p class="text-sm font-medium text-indigo-600 truncate" 
+                  x-text="id(ch)">                    
                 </p>
                 <div class="ml-2 flex-shrink-0 flex justify-center items-center space-x-4">
-                  <p class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    Full-time
+                  <p 
+                    class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
+                    x-bind:class="{ 
+                      'bg-green-100 text-green-800': connected(ch),
+                      'bg-red-100 text-red-800': !connected(ch),
+                    }"
+                    x-text="type(ch)">
                   </p>
                   <!-- This example requires Tailwind CSS v2.0+ -->
                   <div class="relative inline-block text-left">
                     <div>
-                      <button type="button" class="p-2 bg-gray-100 rounded-full flex items-center text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500" id="menu-button" aria-expanded="true" aria-haspopup="true">
+                      <button type="button" class="p-2 bg-gray-100 rounded-full flex items-center text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500" id="menu-button" aria-expanded="true" aria-haspopup="true"                          
+                        @click="toogleOpen(ch)"
+                        @click.away="hideAllMenues(ch)">
                         <span class="sr-only">Open options</span>
                         <!-- Heroicon name: solid/dots-vertical -->
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -42,17 +49,34 @@
                         From: "transform opacity-100 scale-100"
                         To: "transform opacity-0 scale-95"
                     -->
-                    <div class="hidden origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-                      <div class="py-1" role="none">
-                        <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-                        <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Account settings</a>
-                        <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">Support</a>
-                        <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-2">License</a>
-                        <form method="POST" action="#" role="none">
-                          <button type="submit" class="text-gray-700 block w-full text-left px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-3">
-                            Sign out
-                          </button>
-                        </form>
+                    <div 
+                      x-show="isOpen(ch)"
+                      x-transition:enter="transition ease-out duration-200"
+                      x-transition:enter-start="opacity-0 -translate-y-1"
+                      x-transition:enter-end="opacity-100 translate-y-0"
+                      x-transition:leave="transition ease-in duration-150"
+                      x-transition:leave-start="opacity-100 translate-y-0"
+                      x-transition:leave-end="opacity-0 -translate-y-1"
+                      class="z-20 origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                      <div class="py-1 divide-y divide-gray-100" role="none">
+                        <div>
+                          <template x-for="(t, i) in types(ch)" :key="i">
+                            <div class="flex group hover:text-white hover:bg-indigo-600" @click="selectedSensor(index, model.types[t])">
+                              <a href="javascript:;" class="flex-grow text-gray-700 group-hover:text-white block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1" 
+                                x-text="t">
+                              </a>
+                              <span x-show="ch.type === model.types[t].id" class="flex-none text-indigo-600 group-hover:text-white inset-y-0 right-0 flex items-center pr-4">                            
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                </svg>
+                              </span>
+                            </div>                          
+                          </template>
+                        </div>
+                        <a  href="javascript:;" class="flex-grow text-gray-700 hover:text-white hover:bg-red-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1"
+                          @click="clearSensor(index)">
+                          Clear
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -62,20 +86,21 @@
                 <div class="sm:flex">
                   <p class="flex items-center text-sm text-gray-500">
                     <!-- Heroicon name: solid/users -->
-                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                      <path d="M14,12L10,8V11H2V13H10V16M20,18V6C20,4.89 19.1,4 18,4H6A2,2 0 0,0 4,6V9H6V6H18V18H6V15H4V18A2,2 0 0,0 6,20H18A2,2 0 0,0 20,18Z" />
-                      <!-- <path d="M23,12L19,8V11H10V13H19V16M1,18V6C1,4.89 1.9,4 3,4H15A2,2 0 0,1 17,6V9H15V6H3V18H15V15H17V18A2,2 0 0,1 15,20H3A2,2 0 0,1 1,18Z" /> -->
+                    <svg 
+                      class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+                      x-html="icon(ch)">
+                      
                     </svg>
-                    Engineering
+                    <span x-text="func(ch)"></span>
                   </p>
-                  <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                  <span class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
                     <!-- Heroicon name: solid/location-marker -->
 
                     <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                       <path fill-rule="evenodd" d="M17,17H7V7H17M21,11V9H19V7C19,5.89 18.1,5 17,5H15V3H13V5H11V3H9V5H7C5.89,5 5,5.89 5,7V9H3V11H5V13H3V15H5V17A2,2 0 0,0 7,19H9V21H11V19H13V21H15V19H17A2,2 0 0,0 19,17V15H21V13H19V11M13,13H11V11H13M15,9H9V15H15V9Z" clip-rule="evenodd"/>                      
                     </svg>
-                    Remote
-                  </p>
+                    <span x-text="model.deviceId"></span>
+                  </span>
                 </div>
                 <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
                   <!-- Heroicon name: solid/calendar -->
@@ -83,189 +108,138 @@
                     <path fill-rule="evenodd" d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" clip-rule="evenodd"/>                    
                   </svg>
                   <p>
-                    Closing on
-                    <time datetime="2020-01-07">January 7, 2020</time>
+                    <time>--/--/---- --:--:--</time>
                   </p>
                 </div>
               </div>
-            </div>
-          </a>
-        </li>
-        <li>
-          <a href="#" class="block hover:bg-gray-50">
-            <div class="px-4 py-4 sm:px-6">
-              <div class="flex items-center justify-between">
-                <p class="text-sm font-medium text-indigo-600 truncate">
-                  Back End Developer
-                </p>
-                <div class="ml-2 flex-shrink-0 flex justify-center items-center space-x-4">
-                  <p class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                    Unassigned
-                  </p>
-                  <!-- This example requires Tailwind CSS v2.0+ -->
-                  <div class="relative inline-block text-left">
-                    <div>
-                      <button type="button" class="p-2 bg-gray-100 rounded-full flex items-center text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500" id="menu-button" aria-expanded="true" aria-haspopup="true">
-                        <span class="sr-only">Open options</span>
-                        <!-- Heroicon name: solid/dots-vertical -->
-                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                          <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                        </svg>
-                      </button>
-                    </div>
-
-                    <!--
-                      Dropdown menu, show/hide based on menu state.
-
-                      Entering: "transition ease-out duration-100"
-                        From: "transform opacity-0 scale-95"
-                        To: "transform opacity-100 scale-100"
-                      Leaving: "transition ease-in duration-75"
-                        From: "transform opacity-100 scale-100"
-                        To: "transform opacity-0 scale-95"
-                    -->
-                    <div class="hidden origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-                      <div class="py-1" role="none">
-                        <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-                        <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Account settings</a>
-                        <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">Support</a>
-                        <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-2">License</a>
-                        <form method="POST" action="#" role="none">
-                          <button type="submit" class="text-gray-700 block w-full text-left px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-3">
-                            Sign out
-                          </button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="mt-2 sm:flex sm:justify-between">
-                <div class="sm:flex">
-                  <p class="flex items-center text-sm text-gray-500">
-                    <!-- Heroicon name: solid/users -->
-                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                      <!-- <path d="M14,12L10,8V11H2V13H10V16M20,18V6C20,4.89 19.1,4 18,4H6A2,2 0 0,0 4,6V9H6V6H18V18H6V15H4V18A2,2 0 0,0 6,20H18A2,2 0 0,0 20,18Z" /> -->
-                      <path d="M23,12L19,8V11H10V13H19V16M1,18V6C1,4.89 1.9,4 3,4H15A2,2 0 0,1 17,6V9H15V6H3V18H15V15H17V18A2,2 0 0,1 15,20H3A2,2 0 0,1 1,18Z" />
-                    </svg>
-                    Engineering
-                  </p>
-                  <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
-                    <!-- Heroicon name: solid/location-marker -->
-
-                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                      <path fill-rule="evenodd" d="M17,17H7V7H17M21,11V9H19V7C19,5.89 18.1,5 17,5H15V3H13V5H11V3H9V5H7C5.89,5 5,5.89 5,7V9H3V11H5V13H3V15H5V17A2,2 0 0,0 7,19H9V21H11V19H13V21H15V19H17A2,2 0 0,0 19,17V15H21V13H19V11M13,13H11V11H13M15,9H9V15H15V9Z" clip-rule="evenodd"/>                      
-                    </svg>
-                    Remote
-                  </p>
-                </div>
-                <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                  <!-- Heroicon name: solid/calendar -->
-                  <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" clip-rule="evenodd"/>                    
-                  </svg>
-                  <p>
-                    Closing on
-                    <time datetime="2020-01-07">January 7, 2020</time>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </a>
-        </li>
-        <li>
-          <a href="#" class="block hover:bg-gray-50">
-            <div class="px-4 py-4 sm:px-6">
-              <div class="flex items-center justify-between">
-                <p class="text-sm font-medium text-indigo-600 truncate">
-                  Back End Developer
-                </p>
-                <div class="ml-2 flex-shrink-0 flex justify-center items-center space-x-4">
-                  <p class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    Full-time
-                  </p>
-                  <!-- This example requires Tailwind CSS v2.0+ -->
-                  <div class="relative inline-block text-left">
-                    <div>
-                      <button type="button" class="p-2 bg-gray-100 rounded-full flex items-center text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500" id="menu-button" aria-expanded="true" aria-haspopup="true">
-                        <span class="sr-only">Open options</span>
-                        <!-- Heroicon name: solid/dots-vertical -->
-                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                          <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                        </svg>
-                      </button>
-                    </div>
-
-                    <!--
-                      Dropdown menu, show/hide based on menu state.
-
-                      Entering: "transition ease-out duration-100"
-                        From: "transform opacity-0 scale-95"
-                        To: "transform opacity-100 scale-100"
-                      Leaving: "transition ease-in duration-75"
-                        From: "transform opacity-100 scale-100"
-                        To: "transform opacity-0 scale-95"
-                    -->
-                    <div class="hidden origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-                      <div class="py-1" role="none">
-                        <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-                        <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Account settings</a>
-                        <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">Support</a>
-                        <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-2">License</a>
-                        <form method="POST" action="#" role="none">
-                          <button type="submit" class="text-gray-700 block w-full text-left px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-3">
-                            Sign out
-                          </button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="mt-2 sm:flex sm:justify-between">
-                <div class="sm:flex">
-                  <p class="flex items-center text-sm text-gray-500">
-                    <!-- Heroicon name: solid/users -->
-                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                      <path d="M14,12L10,8V11H2V13H10V16M20,18V6C20,4.89 19.1,4 18,4H6A2,2 0 0,0 4,6V9H6V6H18V18H6V15H4V18A2,2 0 0,0 6,20H18A2,2 0 0,0 20,18Z" />
-                      <!-- <path d="M23,12L19,8V11H10V13H19V16M1,18V6C1,4.89 1.9,4 3,4H15A2,2 0 0,1 17,6V9H15V6H3V18H15V15H17V18A2,2 0 0,1 15,20H3A2,2 0 0,1 1,18Z" /> -->
-                    </svg>
-                    Engineering
-                  </p>
-                  <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
-                    <!-- Heroicon name: solid/location-marker -->
-
-                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                      <path fill-rule="evenodd" d="M17,17H7V7H17M21,11V9H19V7C19,5.89 18.1,5 17,5H15V3H13V5H11V3H9V5H7C5.89,5 5,5.89 5,7V9H3V11H5V13H3V15H5V17A2,2 0 0,0 7,19H9V21H11V19H13V21H15V19H17A2,2 0 0,0 19,17V15H21V13H19V11M13,13H11V11H13M15,9H9V15H15V9Z" clip-rule="evenodd"/>                      
-                    </svg>
-                    Remote
-                  </p>
-                </div>
-                <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                  <!-- Heroicon name: solid/calendar -->
-                  <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" clip-rule="evenodd"/>                    
-                  </svg>
-                  <p>
-                    Closing on
-                    <time datetime="2020-01-07">January 7, 2020</time>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </a>
-        </li>
+            </div>            
+          </li>
+        </template>
       </ul>
     </div>
 </div>
 
+<script>
+  function channelSettings() {
+    return {
+      model: {
+        deviceId: null,
+        types: [],
+        functions: [],
+        channels: [],
+        openChannel: null,
+        isOpened: false
+      },      
+      uuid() { // Public Domain/MIT
+        var d = new Date().getTime();//Timestamp
+        var d2 = (performance && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = Math.random() * 16;//random number between 0 and 16
+          if(d > 0){//Use timestamp until depleted
+            r = (d + r)%16 | 0;
+            d = Math.floor(d/16);
+          } else {//Use microseconds since page-load if supported
+            r = (d2 + r)%16 | 0;
+            d2 = Math.floor(d2/16);
+          }
+          return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+      },
+      id(ch) {
+        return (ch.id !== null && ch.id !== undefined) ? ch.id : '00000000-0000-0000-0000-000000000000';
+      },
+      type(ch) {
+        let _type = Object.keys(this.model.types).find(k => this.model.types[k].id === ch.type);
+        return (_type) ? _type : 'Not Connected';
+      },
+      connected(ch) {
+        return (ch.type !== null && ch.type !== undefined);
+      },
+      icon(ch) {
+        let keys = Object.keys(this.model.functions);
+        let func = keys.find(key => this.model.functions[key] === ch.func);
+        if(func !== null && func !== undefined) {
+          switch(func) {
+            case 'INPUT': {
+              return '<path d="M14,12L10,8V11H2V13H10V16M20,18V6C20,4.89 19.1,4 18,4H6A2,2 0 0,0 4,6V9H6V6H18V18H6V15H4V18A2,2 0 0,0 6,20H18A2,2 0 0,0 20,18Z" />';
+            }
+            case 'OUTPUT': {
+              return '<path d="M23,12L19,8V11H10V13H19V16M1,18V6C1,4.89 1.9,4 3,4H15A2,2 0 0,1 17,6V9H15V6H3V18H15V15H17V18A2,2 0 0,1 15,20H3A2,2 0 0,1 1,18Z" />';
+            }
+            case 'ANALOG': {
+              return '<path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12C20,14.4 19,16.5 17.3,18C15.9,16.7 14,16 12,16C10,16 8.2,16.7 6.7,18C5,16.5 4,14.4 4,12A8,8 0 0,1 12,4M14,5.89C13.62,5.9 13.26,6.15 13.1,6.54L11.81,9.77L11.71,10C11,10.13 10.41,10.6 10.14,11.26C9.73,12.29 10.23,13.45 11.26,13.86C12.29,14.27 13.45,13.77 13.86,12.74C14.12,12.08 14,11.32 13.57,10.76L13.67,10.5L14.96,7.29L14.97,7.26C15.17,6.75 14.92,6.17 14.41,5.96C14.28,5.91 14.15,5.89 14,5.89M10,6A1,1 0 0,0 9,7A1,1 0 0,0 10,8A1,1 0 0,0 11,7A1,1 0 0,0 10,6M7,9A1,1 0 0,0 6,10A1,1 0 0,0 7,11A1,1 0 0,0 8,10A1,1 0 0,0 7,9M17,9A1,1 0 0,0 16,10A1,1 0 0,0 17,11A1,1 0 0,0 18,10A1,1 0 0,0 17,9Z" />';
+            }
+            case 'SPECIAL': {
+              return '<path d="M7,3H17V5H19V8H16V14H8V8H5V5H7V3M17,9H19V14H17V9M11,15H13V22H11V15M5,9H7V14H5V9Z" />';
+            }
+            default: {
+              return '<path d="M3.05 13H1V11H3.05C3.5 6.83 6.83 3.5 11 3.05V1H13V3.05C17.17 3.5 20.5 6.83 20.95 11H23V13H20.95C20.5 17.17 17.17 20.5 13 20.95V23H11V20.95C6.83 20.5 3.5 17.17 3.05 13M12 5C8.13 5 5 8.13 5 12S8.13 19 12 19 19 15.87 19 12 15.87 5 12 5M11.13 17.25H12.88V15.5H11.13V17.25M12 6.75C10.07 6.75 8.5 8.32 8.5 10.25H10.25C10.25 9.28 11.03 8.5 12 8.5S13.75 9.28 13.75 10.25C13.75 12 11.13 11.78 11.13 14.63H12.88C12.88 12.66 15.5 12.44 15.5 10.25C15.5 8.32 13.93 6.75 12 6.75Z" />';
+            }
+          }
+        } else {
+          return '<path d="M2,5.27L3.28,4L20,20.72L18.73,22L13.9,17.17L11.29,19.78C9.34,21.73 6.17,21.73 4.22,19.78C2.27,17.83 2.27,14.66 4.22,12.71L5.71,11.22C5.7,12.04 5.83,12.86 6.11,13.65L5.64,14.12C4.46,15.29 4.46,17.19 5.64,18.36C6.81,19.54 8.71,19.54 9.88,18.36L12.5,15.76L10.88,14.15C10.87,14.39 10.77,14.64 10.59,14.83C10.2,15.22 9.56,15.22 9.17,14.83C8.12,13.77 7.63,12.37 7.72,11L2,5.27M12.71,4.22C14.66,2.27 17.83,2.27 19.78,4.22C21.73,6.17 21.73,9.34 19.78,11.29L18.29,12.78C18.3,11.96 18.17,11.14 17.89,10.36L18.36,9.88C19.54,8.71 19.54,6.81 18.36,5.64C17.19,4.46 15.29,4.46 14.12,5.64L10.79,8.97L9.38,7.55L12.71,4.22M13.41,9.17C13.8,8.78 14.44,8.78 14.83,9.17C16.2,10.54 16.61,12.5 16.06,14.23L14.28,12.46C14.23,11.78 13.94,11.11 13.41,10.59C13,10.2 13,9.56 13.41,9.17Z" />';
+        }
+      },
+      func(ch) {
+        let keys = Object.keys(this.model.functions);
+        let func = keys.find(key => this.model.functions[key] === ch.func);
+        return (func !== null && func !== undefined) ? func : 'UNKNOW';
+      },
+      initialize() {
+        showLoading();
 
+        fetch(url + "/command", {
+          method: "POST",
+          body: JSON.stringify({ cmd: CommandType.REQUEST_SENSORS_TYPES })
+        })
+        .then(response => response.json())
+        .then(types => {
+          this.model.types = types;
+          fetch(url + "/command", {
+            method: "POST",
+            body: JSON.stringify({ cmd: CommandType.REQUEST_SENSORS_FUNCTIONS })
+          })
+          .then(response => response.json())
+          .then(functions => {
+            this.model.functions = functions;
+            fetch(url + "/command", {
+              method: "POST",
+              body: JSON.stringify({ cmd: CommandType.REQUEST_CHANNELS })
+            })
+            .then(response => response.json())
+            .then(data => {
+              this.model.deviceId = data.deviceId;
+              this.model.channels = data.channels;
+              hideLoading();
+            });
+          });
+        });
+      },
+      isOpen(ch) {
+        return (ch.ch === this.openChannel);
+      },
+      toogleOpen(ch) {        
+        this.openChannel = ch.ch;
+      },
+      hideAllMenues(ch) {
+        if(this.openChannel === ch.ch)
+          this.openChannel = null;
+      },
+      types(ch) {
+        let _types = Object.keys(this.model.types).filter(k => ch.types.includes(this.model.types[k].id));        
+        return _types;
+      },
+      selectedSensor(i, s) {
+        this.model.channels[i].type = s.id;
+        this.update();
+      },
+      clearSensor(i) {
+        this.model.channels[i].type = null;
+        this.update();
+      },
+      update() {
 
-
-
-
-
-
-
-
-
+      }
+    }
+  }
+</script>

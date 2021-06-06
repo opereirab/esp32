@@ -1,0 +1,18 @@
+{
+  "INPUT":                  1,
+  "OUTPUT":                 2,
+  "PULLUP":                 4,
+  "INPUT_PULLUP":           5,
+  "PULLDOWN":               8,
+  "INPUT_PULLDOWN":         9,
+  "OPEN_DRAIN":            10,
+  "OUTPUT_OPEN_DRAIN":     18,
+  "SPECIAL":              240,
+  "FUNCTION_1":             0,
+  "FUNCTION_2":            32,
+  "FUNCTION_3":            40,
+  "FUNCTION_4":            64,
+  "FUNCTION_5":           128,
+  "FUNCTION_6":           160,
+  "ANALOG":               192
+}
