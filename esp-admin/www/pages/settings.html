@@ -236,7 +236,7 @@
       activeItem: 0,
       load(uri, index) {
         showLoading();
-        fetch("./pages/" + uri)
+        fetch("/pages/" + uri)
           .then(response => response.text())
           .then(html => {
             setHtml(document.getElementById("settings-container"), html);

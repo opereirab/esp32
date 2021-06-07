@@ -52,7 +52,7 @@ function body() {
     },
     login() {
       showLoading();
-      fetch("./pages/login.html")
+      fetch("/pages/login.html")
         .then(response => response.text())
         .then(html => {
           setHtml(document.getElementById("main-content"), html);
@@ -61,7 +61,7 @@ function body() {
     },
     dashboard() {
       showLoading();
-      fetch("./pages/dashboard.html")
+      fetch("/pages/dashboard.html")
         .then(response => response.text())
         .then(html => {
           setHtml(document.getElementById("main-content"), html);
@@ -71,7 +71,7 @@ function body() {
     },
     settings() {
       showLoading();
-      fetch("./pages/settings.html")
+      fetch("/pages/settings.html")
         .then(response => response.text())
         .then(html => {
           setHtml(document.getElementById("main-content"), html);
@@ -162,7 +162,7 @@ function onDocumentReady() {
   initializeEvents();
   showLoading();
   setTimeout(() => {
-    fetch("./pages/dashboard.html")
+    fetch("/pages/dashboard.html")
     .then(response => response.text())
     .then(html => {          
       setHtml(document.getElementById("main-content"), html);
