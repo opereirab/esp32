@@ -82,6 +82,13 @@ function body() {
     closeAll() {
       this.navbar.toggle(0);
       this.responsiveMenu.isOpened = false;
+    },
+    closeUpdateTimeDialog() {
+      document.getElementById("dlgUpdateDateTime").classList.remove("fixed");
+      document.getElementById("dlgUpdateDateTime").classList.add("hidden");
+    },
+    syncronizeDevicesTime() {
+      this.closeUpdateTimeDialog();
     }
   }
 }
@@ -167,6 +174,8 @@ function onDocumentReady() {
     .then(html => {          
       setHtml(document.getElementById("main-content"), html);
       hideLoading();
+      document.getElementById("dlgUpdateDateTime").classList.remove("hidden");
+      document.getElementById("dlgUpdateDateTime").classList.add("fixed");
     });
   }, 3000);
 }
