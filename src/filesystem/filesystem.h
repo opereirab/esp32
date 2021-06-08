@@ -1,7 +1,10 @@
 #ifndef _FILESYSTEM_H_
 #define _FILESYSTEM_H_
 
-#include <SPIFFS.h>
+// #include <SPIFFS.h>
+#include <FS.h>
+#include <SPI.h>
+#include <SD.h>
 
 class FileSystem
 {

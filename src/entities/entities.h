@@ -69,8 +69,12 @@ struct NetworkSettings
   }
 
   bool load() {
-    bool result = false;    
-    if (File file = filesystem.open(DB_PATH + "/network.json")) {
+    bool result = false;
+    if(!filesystem.exists(DB_PATH + "/network.json"))
+      return result;
+          
+    File file = filesystem.open(DB_PATH + "/network.json");
+    if (file) {
       StaticJsonDocument<256> doc;
       DeserializationError e = deserializeJson(doc, file);
       if(e == DeserializationError::Ok) {

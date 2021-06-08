@@ -86,7 +86,7 @@ void Webserver::setup()
 
   // attach filesystem root at URL /fs
   server
-    .serveStatic("/", SPIFFS, "/www/")
+    .serveStatic("/", SD, "/www/")
     .setIsDir(true)
     .setDefaultFile("index.html");
   

@@ -13,80 +13,80 @@ FileSystem::~FileSystem()
 
 File FileSystem::open(const char* path, const char* mode)
 { 
-  return SPIFFS.open(path, mode); 
+  return SD.open(path, mode); 
 }
 
 File FileSystem::open(const String& path, const char* mode)
 { 
-  return SPIFFS.open(path, mode); 
+  return SD.open(path, mode); 
 }
 
 bool FileSystem::exists(const char* path)                      
 { 
-  return SPIFFS.exists(path); 
+  return SD.exists(path); 
 }
 
 bool FileSystem::exists(const String& path)                    
 { 
-  return SPIFFS.exists(path); 
+  return SD.exists(path); 
 }
 
 bool FileSystem::remove(const char* path)                      
 { 
-  return SPIFFS.remove(path); 
+  return SD.remove(path); 
 }
 
 bool FileSystem::remove(const String& path)                    
 { 
-  return SPIFFS.remove(path); 
+  return SD.remove(path); 
 }
 
 bool FileSystem::rename(const char* pathFrom, const char* pathTo)
 { 
-  return SPIFFS.rename(pathFrom, pathTo); 
+  return SD.rename(pathFrom, pathTo); 
 }
 
 bool FileSystem::rename(const String& pathFrom, const String& pathTo)
 { 
-  return SPIFFS.rename(pathFrom, pathTo); 
+  return SD.rename(pathFrom, pathTo); 
 }
 
 bool FileSystem::mkdir(const char *path)                       
 { 
-  return SPIFFS.mkdir(path); 
+  return SD.mkdir(path); 
 }
 
 bool FileSystem::mkdir(const String &path)                     
 { 
-  return SPIFFS.mkdir(path); 
+  return SD.mkdir(path); 
 }
 
 bool FileSystem::rmdir(const char *path)                       
 { 
-  return SPIFFS.rmdir(path); 
+  return SD.rmdir(path); 
 }
 
 bool FileSystem::rmdir(const String &path)                     
 { 
-  return SPIFFS.rmdir(path); 
+  return SD.rmdir(path); 
 }
 
 bool FileSystem::format() 
 { 
-  return SPIFFS.format(); 
+  return false; // SD.format(); 
 }
 
 void FileSystem::end()
 { 
-  SPIFFS.end(); 
+  SD.end(); 
 }
 
 size_t FileSystem::totalBytes() {
-  return SPIFFS.totalBytes();
+  return SD.totalBytes();
 }
 
 size_t FileSystem::usedBytes() {
-  return SPIFFS.usedBytes();
+  return SD.usedBytes();
 }
 
 float FileSystem::usedPercent() {
@@ -103,7 +103,7 @@ size_t FileSystem::freePercent() {
 
 void FileSystem::setup()
 {
-  if(!SPIFFS.begin(false, "/spiffs", 20)) {
+  if(!SD.begin(SS, SPI, 4000000U, "/sd", 20)) {
     Serial.println("Fail mount filesystem!!!");
   }
 
