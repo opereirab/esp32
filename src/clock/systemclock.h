@@ -6,20 +6,23 @@
 class SystemClock
 {
 private:
-  ESP32Time rtc;
+  ESP32Time softRtc;  
   
 public:
   SystemClock(/* args */);
   virtual ~SystemClock();
 
+private:
+  void printDateTime(const class RtcDateTime& dt);
+
 public:
   String getTime();
-
+  String getCompilationTime();
+  uint64_t Epoch64Time();
+  
 public:
   void setup();
   void loop();
-
-
 };
 
 extern SystemClock systemclock;

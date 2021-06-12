@@ -30,6 +30,7 @@ private:
 
 public:
   void sendEvent(CommandType cmd, JsonDocument& doc);
+  void sendEvent(CommandType cmd, const char* payload);
 
 public:
   void setup();

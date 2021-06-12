@@ -137,8 +137,19 @@ function process(payload) {
       // $dispatch('updateNetworks', ) ;
       break;
     }
-    default: {          
-      console.log(payload);
+    default: {
+      try {
+        /*console.log(new Intl.DateTimeFormat('default', {
+          year: 'numeric', month: 'numeric', day: 'numeric',
+          hour: 'numeric', minute: 'numeric', second: 'numeric',
+          hour12: false,
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,          
+        }).format(payload*1000), new Date(payload*1000).toTimeString().slice(9));*/
+        console.log(new Date(payload*1000).toString());
+      } catch (error) {
+        console.log(payload);  
+      }           
+      
       break;
     }          
   }

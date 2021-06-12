@@ -68,6 +68,13 @@ void Webserver::sendEvent(CommandType cmd, JsonDocument& doc)
   }
 }
 
+void Webserver::sendEvent(CommandType cmd, const char* payload)
+{
+  if(events.count() > 0) {    
+    events.send(payload);
+  }
+}
+
 void Webserver::setup()
 {
   DefaultHeaders::Instance().addHeader("Access-Control-Allow-Credentials", "true");
