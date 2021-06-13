@@ -10,25 +10,32 @@
 
 #include <U8g2lib.h>
 // #include <SPI.h>
-U8G2_ST7920_128X64_F_SW_SPI u8g2(U8G2_R0, /* clock=*/ 14 /* A4 */ , /* data=*/ 13 /* A2 */, /* CS=*/ 15 /* A3 */);
+U8G2_ST7920_128X64_F_SW_SPI u8g2(U8G2_R0, /* clock=*/ 14, /* data=*/ 13, /* CS=*/ 15);
 
 TaskHandle_t task;
 
 void loop1(void*) {
 
 	while(true) {
+    String datetime = systemclock.getTime();
 		uint64_t time = systemclock.Epoch64Time();
+    
     char* payload = new char[40] { '\0' };
     sprintf(payload, "%llu", time);		
 		webserver.sendEvent(CommandType::UNKNOW, payload);
     delete [] payload;
     payload = NULL;
-
     
-    String datetime = systemclock.getTime();
     u8g2.clearBuffer();					// clear the internal memory
-    u8g2.setFont(u8g2_font_courR08_tn);	// choose a suitable font
-    u8g2.drawStr(0, 10, datetime.c_str());	// write something to the internal memory
+    u8g2.setFont(u8g2_font_5x7_tf);
+
+    if(WiFi.isConnected()) {      
+      u8g2.drawStr(0, 6, WiFi.localIP().toString().c_str());
+    } else {
+      u8g2.drawStr(0, 6, WiFi.softAPIP().toString().c_str());
+    }
+    
+    u8g2.drawStr(17, 64, datetime.c_str());	// write something to the internal memory
     u8g2.sendBuffer();
 
 		mng.loop();
@@ -59,7 +66,7 @@ void setup() {
   );
 
   u8g2.begin();
-  u8g2.clearBuffer();					// clear the internal memory
+  u8g2.clearBuffer();
   // u8g2.setFont(u8g2_font_courR08_tn);	// choose a suitable font
   // u8g2.drawStr(0,10,"Hello World!");	// write something to the internal memory
   // u8g2.sendBuffer();

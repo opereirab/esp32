@@ -9,7 +9,6 @@ public:
   DeviceSettings device;
   NetworkSettings network;
 
-
 public:
   Settings(/* args */);
   virtual ~Settings();
