@@ -8,20 +8,31 @@
 #include "webserver/webserver.h"
 #include "channels/channelsmanager.h"
 
+#include <U8g2lib.h>
+// #include <SPI.h>
+U8G2_ST7920_128X64_F_SW_SPI u8g2(U8G2_R0, /* clock=*/ 14 /* A4 */ , /* data=*/ 13 /* A2 */, /* CS=*/ 15 /* A3 */);
+
 TaskHandle_t task;
 
 void loop1(void*) {
 
 	while(true) {
-		// uint64_t time = systemclock.Epoch64Time();
-    // char* payload = new char[40] { '\0' };
-    // sprintf(payload, "%llu", time);		
-		// webserver.sendEvent(CommandType::UNKNOW, payload);
-    // delete [] payload;
-    // payload = NULL;
+		uint64_t time = systemclock.Epoch64Time();
+    char* payload = new char[40] { '\0' };
+    sprintf(payload, "%llu", time);		
+		webserver.sendEvent(CommandType::UNKNOW, payload);
+    delete [] payload;
+    payload = NULL;
+
+    
+    String datetime = systemclock.getTime();
+    u8g2.clearBuffer();					// clear the internal memory
+    u8g2.setFont(u8g2_font_courR08_tn);	// choose a suitable font
+    u8g2.drawStr(0, 10, datetime.c_str());	// write something to the internal memory
+    u8g2.sendBuffer();
 
 		mng.loop();
-		systemclock.loop();	
+		// systemclock.loop();	
 		delay(1000);
 	}
 
@@ -46,11 +57,24 @@ void setup() {
     &task,
     0
   );
+
+  u8g2.begin();
+  u8g2.clearBuffer();					// clear the internal memory
+  // u8g2.setFont(u8g2_font_courR08_tn);	// choose a suitable font
+  // u8g2.drawStr(0,10,"Hello World!");	// write something to the internal memory
+  // u8g2.sendBuffer();
 }
 
 
 
 void loop() {	
   // network.loop();
+
+  // u8g2.clearBuffer();					// clear the internal memory
+  // u8g2.setFont(u8g2_font_ncenB08_tr);	// choose a suitable font
+  // u8g2.drawStr(0,10,"Hello World!");	// write something to the internal memory
+  // u8g2.sendBuffer();					// transfer internal memory to the display
+  // delay(1000);  
+
   yield();
 }

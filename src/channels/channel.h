@@ -19,17 +19,15 @@ public:
   SensorType type;
   ProtocolType ptl;
 
-  char id[40] = {'\0'};
-  char name[50] = {'\0'};
-  char ip[20] = {'\0'};
+  String id = "";
   
 public:
   Channel(/* args */);
   virtual ~Channel();
 
 public:
-  virtual void setup() = 0;
-  virtual void loop() = 0;
+  virtual void setup() {} /*= 0*/;
+  virtual void loop() {} /*= 0*/;
 
 };
 

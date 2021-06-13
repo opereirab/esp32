@@ -145,7 +145,13 @@ function process(payload) {
           hour12: false,
           timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,          
         }).format(payload*1000), new Date(payload*1000).toTimeString().slice(9));*/
-        console.log(new Date(payload*1000).toString());
+
+        let elem = document.getElementById("datetime");
+        if(elem) {
+          elem.innerHTML = moment.unix(payload).utc().format('DD/MM/YYYY HH:mm:ss');
+        }
+        // console.log(moment.unix(payload).utc().format('DD/MM/YYYY HH:mm:ss'));
+        // console.log(new Date(payload*1000).toString());
       } catch (error) {
         console.log(payload);  
       }           
@@ -184,7 +190,7 @@ function onDocumentReady() {
     .then(response => response.text())
     .then(html => {          
       setHtml(document.getElementById("main-content"), html);
-      hideLoading();
+      // hideLoading();
       document.getElementById("dlgUpdateDateTime").classList.remove("hidden");
       document.getElementById("dlgUpdateDateTime").classList.add("fixed");
     });
