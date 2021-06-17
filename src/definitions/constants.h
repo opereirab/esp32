@@ -1,6 +1,8 @@
 #ifndef _CONSTANTS_H_
 #define _CONSTANTS_H_
 
+#define VERSION "1.0.0"
+
 #include "logger/logger.h"
 
 #define DEVICE_TYPE String("ESP32")

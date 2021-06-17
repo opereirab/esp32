@@ -19,6 +19,7 @@ public:
   String getTime();
   String getCompilationTime();
   uint64_t Epoch64Time();
+  void setDateTime(uint64_t time);
   
 public:
   void setup();

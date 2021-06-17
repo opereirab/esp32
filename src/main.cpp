@@ -27,6 +27,10 @@ void loop1(void*) {
     payload = NULL;
     
     u8g2.clearBuffer();					// clear the internal memory
+
+    u8g2.setFont(u8g2_font_u8glib_4_tf);
+    u8g2.drawStr(113, 63, VERSION);
+
     u8g2.setFont(u8g2_font_5x7_tf);
 
     if(WiFi.isConnected()) {      
@@ -35,7 +39,7 @@ void loop1(void*) {
       u8g2.drawStr(0, 6, WiFi.softAPIP().toString().c_str());
     }
     
-    u8g2.drawStr(17, 64, datetime.c_str());	// write something to the internal memory
+    u8g2.drawStr(0, 64, datetime.c_str());	// write something to the internal memory
     u8g2.sendBuffer();
 
 		mng.loop();

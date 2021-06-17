@@ -88,7 +88,19 @@ function body() {
       document.getElementById("dlgUpdateDateTime").classList.add("hidden");
     },
     syncronizeDevicesTime() {
-      this.closeUpdateTimeDialog();
+      let date = new Date();
+      fetch(url + "/command", {
+        method: "POST",
+        body: JSON.stringify({ 
+          cmd: CommandType.REQUEST_SYNC_DATETIME,
+          data: moment(date).add(-1 * date.getTimezoneOffset(), 'minutes').add(1, 'seconds').unix()
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        this.closeUpdateTimeDialog();
+      });
     }
   }
 }

@@ -37,6 +37,7 @@ var CommandType = {
   REQUEST_SAVE_MODBUS_SETTINGS                : 35,
 
   REQUEST_SIGNIN                              : 40,
+  REQUEST_SYNC_DATETIME                       : 41,
 
   REQUEST_RESTART                             : 255,
 

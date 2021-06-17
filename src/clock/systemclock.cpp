@@ -83,6 +83,14 @@ uint64_t SystemClock::Epoch64Time() {
   return softRtc.getEpoch();
 }
 
+void SystemClock::setDateTime(uint64_t time)
+{
+  RtcDateTime compiled;
+  compiled.InitWithEpoch64Time(time);
+  hardRtc.SetDateTime(compiled);
+  softRtc.setTime(compiled.Epoch64Time());
+}
+
 void SystemClock::setup()
 {
   softRtc.getEpoch();

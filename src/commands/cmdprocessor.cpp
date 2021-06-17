@@ -1,6 +1,7 @@
 #include "cmdprocessor.h"
 #include "cmds.h"
 #include "settings/settings.h"
+#include "clock/systemclock.h"
 #include "channels/channelsmanager.h"
 
 #include <WiFi.h>
@@ -172,7 +173,23 @@ String CmdProcessor::process(const String& payload, size_t length) {
 
       break;
     }
-    
+    case CommandType::REQUEST_SYNC_DATETIME: {
+      StaticJsonDocument <16> dataFilter;
+      dataFilter["data"] = true;
+
+      StaticJsonDocument<64> doc;
+      DeserializationError e = deserializeJson(doc, payload.c_str(), DeserializationOption::Filter(dataFilter));
+      if(e != DeserializationError::Ok) {
+        return output;
+      }
+
+      uint64_t time = doc["data"].as<uint64_t>();
+      systemclock.setDateTime(time);
+
+      serializeJson(doc, output);
+
+      break;
+    }
     default: break;
   }
 
