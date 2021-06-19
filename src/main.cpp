@@ -17,6 +17,8 @@ TaskHandle_t task;
 void loop1(void*) {
 
 	while(true) {
+    mng.loop();
+    
     String datetime = systemclock.getTime();
 		uint64_t time = systemclock.Epoch64Time();
     
@@ -42,8 +44,8 @@ void loop1(void*) {
     u8g2.drawStr(0, 64, datetime.c_str());	// write something to the internal memory
     u8g2.sendBuffer();
 
-		mng.loop();
-		// systemclock.loop();	
+		
+		// TODO: Read config settings
 		delay(1000);
 	}
 
@@ -71,21 +73,11 @@ void setup() {
 
   u8g2.begin();
   u8g2.clearBuffer();
-  // u8g2.setFont(u8g2_font_courR08_tn);	// choose a suitable font
-  // u8g2.drawStr(0,10,"Hello World!");	// write something to the internal memory
-  // u8g2.sendBuffer();
 }
 
 
 
 void loop() {	
   // network.loop();
-
-  // u8g2.clearBuffer();					// clear the internal memory
-  // u8g2.setFont(u8g2_font_ncenB08_tr);	// choose a suitable font
-  // u8g2.drawStr(0,10,"Hello World!");	// write something to the internal memory
-  // u8g2.sendBuffer();					// transfer internal memory to the display
-  // delay(1000);  
-
   yield();
 }
