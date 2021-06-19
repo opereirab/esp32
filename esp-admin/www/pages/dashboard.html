@@ -1,3 +1,5 @@
+
+
 <div x-data="dashboard()" x-init="init()" class="p-8 divide-y-2 divide-gray-50">
   <!-- This example requires Tailwind CSS v2.0+ -->
   <div class="lg:flex lg:items-center lg:justify-between pb-6 sm:pb-8">
@@ -245,55 +247,3 @@
   </div>
 </div>
 
-<script>
-  function dashboard() {
-    return {
-      model: {
-        channels: []
-      },
-      init() {
-        showLoading();
-        fetch(url + "/command?dummy=" + Date.now(), {
-          method: "POST",
-          body: JSON.stringify({ cmd: CommandType.REQUEST_DEVICE_SETTINGS })
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          this.model = Object.assign(this.model, data);
-          // this.model = data;
-          
-          fetch(url + "/command", {
-            method: "POST",
-            body: JSON.stringify({ cmd: CommandType.REQUEST_SENSORS_TYPES })
-          })
-          .then(response => response.json())
-          .then(types => {
-            console.log(types);
-            this.model.types = types;
-            fetch(url + "/command", {
-              method: "POST",
-              body: JSON.stringify({ cmd: CommandType.REQUEST_SENSORS_FUNCTIONS })
-            })
-            .then(response => response.json())
-            .then(functions => {
-              console.log(functions);
-              this.model.functions = functions;
-              fetch(url + "/command", {
-                method: "POST",
-                body: JSON.stringify({ cmd: CommandType.REQUEST_CHANNELS })
-              })
-              .then(response => response.json())
-              .then(data => {
-                console.log(data);
-                this.model.deviceId = data.deviceId;
-                this.model.channels = data.channels;
-                hideLoading();
-              });
-            });
-          });
-        });
-      }
-    }
-  }
-</script>
