@@ -4,7 +4,7 @@
 ChannelsManager mng;
 
 ChannelsManager::ChannelsManager(/* args */)
-  : channels(NULL), count(0)
+  : channels(NULL), count(0), lastUpdate(millis())
 {
 }
 
@@ -69,9 +69,11 @@ void ChannelsManager::setup()
 
 void ChannelsManager::loop()
 {
-  for (size_t i = 0; i < count; i++)
-  {
-    channels[i].setup();
+  if(millis() - lastUpdate >= 3000) {
+    for (size_t i = 0; i < count; i++)
+    {
+      channels[i].loop();
+    }
+    lastUpdate = millis();
   }
-  
 }

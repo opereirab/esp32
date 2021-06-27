@@ -7,7 +7,8 @@ class ChannelsManager
 {
 private:
   Channel* channels;
-  size_t count; 
+  size_t count;
+  unsigned long lastUpdate;
 
 public:
   ChannelsManager(/* args */);

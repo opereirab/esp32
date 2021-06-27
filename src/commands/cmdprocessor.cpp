@@ -65,11 +65,17 @@ String CmdProcessor::process(const String& payload, size_t length) {
       JsonObject ap = resp.createNestedObject("ap");
       ap["ssid"] = WiFi.softAPSSID();
       ap["ip"] = WiFi.softAPIP().toString();
+      ap["mac"] = WiFi.softAPmacAddress();
+      ap["ch"] = WiFi.channel();
+      
+
 
       JsonObject wifi = resp.createNestedObject("wifi");
       wifi["ssid"] = WiFi.SSID();
       wifi["ip"] = WiFi.localIP().toString();
       wifi["rssi"] = WiFi.RSSI();
+      wifi["mac"] = WiFi.macAddress();
+      wifi["ch"] = WiFi.channel();
 
       serializeJson(resp, output);      
       break;
