@@ -17,16 +17,17 @@ TaskHandle_t task;
 void loop1(void*) {
 
 	while(true) {
+
     mng.loop();
     
     String datetime = systemclock.getTime();
-		uint64_t time = systemclock.Epoch64Time();
-    
-    char* payload = new char[40] { '\0' };
-    sprintf(payload, "%llu", time);		
-		webserver.sendEvent(CommandType::UNKNOW, payload);
-    delete [] payload;
-    payload = NULL;
+		
+    // uint64_t time = systemclock.Epoch64Time();    
+    // char* payload = new char[40] { '\0' };
+    // sprintf(payload, "%llu", time);		
+		// webserver.sendEvent(CommandType::UNKNOW, payload);
+    // delete [] payload;
+    // payload = NULL;
     
     u8g2.clearBuffer();					// clear the internal memory
 
@@ -46,7 +47,8 @@ void loop1(void*) {
 
 		
 		// TODO: Read config settings
-		delay(1000);
+		delay(900);
+    // yield();
 	}
 
 }
@@ -75,10 +77,8 @@ void setup() {
   u8g2.clearBuffer();
 }
 
-
-
 void loop() {	
   // network.loop();
-  mng.loop();
+  // mng.loop();
   yield();
 }

@@ -13,6 +13,15 @@ struct DeviceSettings {
     serialNum.toUpperCase();
     return serialNum;
   }
+
+  bool load() {
+    return true;
+  }
+
+  bool save() {
+    return true;
+  }
+
 };
 
 struct NetworkSettings

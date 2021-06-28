@@ -1,8 +1,7 @@
 #ifndef _CMDPROCESSOR_H_
 #define _CMDPROCESSOR_H_
 
-#define ARDUINOJSON_USE_LONG_LONG 1
-#include <Arduino.h>
+#include "definitions/constants.h"
 
 class CmdProcessor
 {

@@ -1,6 +1,14 @@
 #ifndef _CONSTANTS_H_
 #define _CONSTANTS_H_
 
+#include <Arduino.h>
+
+#ifndef ARDUINOJSON_USE_LONG_LONG
+#define ARDUINOJSON_USE_LONG_LONG 1
+#endif
+
+#include <ArduinoJson.h>
+
 #define VERSION "1.0.0"
 
 #include "logger/logger.h"

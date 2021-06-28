@@ -5,7 +5,6 @@
 #include "channels/channelsmanager.h"
 
 #include <WiFi.h>
-#include <ArduinoJson.h>
 
 CmdProcessor cmdprocessor;
 
@@ -196,6 +195,7 @@ String CmdProcessor::process(const String& payload, size_t length) {
 
       break;
     }
+    
     default: break;
   }
 

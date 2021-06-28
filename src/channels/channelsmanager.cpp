@@ -1,5 +1,7 @@
 #include "channelsmanager.h"
+#include "commands/cmds.h"
 #include "filesystem/filesystem.h"
+#include "clock/systemclock.h"
 
 ChannelsManager mng;
 
@@ -49,11 +51,12 @@ void ChannelsManager::setup()
     Serial.println();
 
     const char* id = doc["id"].as<const char*>();
+    uint8_t ch = doc["ch"].as<uint8_t>();
+    uint8_t pin = doc["pin"].as<uint8_t>();
+    SensorType type = (SensorType) doc["type"].as<uint8_t>();
 
     if(id != NULL) {
-      channels[count].pin = doc["pin"].as<uint8_t>();
-      channels[count].type = (SensorType) doc["type"].as<uint8_t>();
-      channels[count].id = id;
+      channels[count].setup(id, ch, pin, type);
       count++;
     }
 
@@ -62,18 +65,34 @@ void ChannelsManager::setup()
   file.close();
   Serial.printf("Sensors: %d\n", count);
 
-  for(size_t i = 0; i < count; i++) {
+  /*for(size_t i = 0; i < count; i++) {
     channels[i].setup();
-  }
+  }*/
 }
 
 void ChannelsManager::loop()
 {
   if(millis() - lastUpdate >= 3000) {
+    
+    const size_t capacity = JSON_OBJECT_SIZE(3) + JSON_ARRAY_SIZE(count + 1) +  (count + 1)*(JSON_OBJECT_SIZE(2) + JSON_ARRAY_SIZE(7)) + 255;
+    DynamicJsonDocument doc(capacity);
+    doc["cmd"] = RESPONSE_SENSORS_VALUES;
+    JsonArray data = doc.createNestedArray("data");
+
     for (size_t i = 0; i < count; i++)
     {
-      channels[i].loop();
+      channels[i].loop(data);
     }
+
+    doc["date"] = systemclock.Epoch64Time();
+
+    // TODO: Notify to all listeners
+    serializeJson(doc, Serial);
+
+    if(!doc.isNull()) {
+      doc.clear();
+    }
+
     lastUpdate = millis();
   }
 }

@@ -1,9 +1,9 @@
 #ifndef _WEBSERVER_H_
 #define _WEBSERVER_H_
 
+#include "definitions/constants.h"
 #include "filesystem/filesystem.h"
 #include "commands/cmds.h"
-#include <ArduinoJson.h>
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 
