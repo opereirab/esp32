@@ -110,6 +110,19 @@ String CmdProcessor::process(const String& payload, size_t length) {
       file.close(); 
       break;
     }
+    case CommandType::REQUEST_CLOUD_SETTINGS: {
+      StaticJsonDocument<1024> resp;
+      
+      resp["type"] = settings.cloud.type;
+      resp["host"] = settings.cloud.host;
+      resp["port"] = settings.cloud.port;
+      resp["username"] = settings.cloud.username;
+      resp["password"] = settings.cloud.password;
+      resp["topic"] = settings.cloud.topic;
+
+      serializeJson(resp, output);
+      break;
+    }
 
     case CommandType::REQUEST_SIGNIN: {
       StaticJsonDocument <16> dataFilter;

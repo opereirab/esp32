@@ -19,6 +19,7 @@ var CommandType = {
   REQUEST_CHANNELS                            : 16,
   REQUEST_DEVICE_RULES                        : 17,
   REQUEST_MODBUS_SETTINGS                     : 18,
+  REQUEST_CLOUD_SETTINGS                      : 19,
 
   REQUEST_SAVE_DEVICE_SETTINGS                : 21,
   REQUEST_SAVE_NETWORK_SETTINGS               : 22,

@@ -1,1 +1,50 @@
-<p>Cloud works!!!</p>
+<div id="cloud" x-data="cloudSettings()" x-init="init()" class="py-4 px-0 md:p-8">
+  <form action="#" method="POST" @submit="onSubmitWifi($event)">
+    <div class="shadow overflow-hidden rounded-md">
+      <div class="px-4 py-5 bg-white sm:p-6">
+        <div class="grid grid-cols-6 gap-6">
+          <div class="col-span-6 sm:col-span-3">
+            <label for="type" class="block text-sm font-medium text-gray-700">Protocol</label>
+            <select x-model="model.type" id="type" name="type" autocomplete="type" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+              <option :key="0" :value="0">WS</option>
+              <option :key="1" :value="1">MQTT</option>
+            </select>
+          </div>
+
+          <template x-if="(parseInt(model.type) === 1)">
+            <div
+              class="col-span-6 sm:col-span-3">
+              <label for="topic" class="block text-sm font-medium text-gray-700">Topic</label>
+              <input x-model="model.topic" type="text" name="topic" id="topic" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
+            </div>
+          </template>
+
+          <div class="col-span-6 sm:col-span-5">
+            <label for="host" class="block text-sm font-medium text-gray-700">Host</label>
+            <input x-model="model.host" type="url" name="host" id="host" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
+          </div>
+
+          <div class="col-span-6 sm:col-span-1">
+            <label for="port" class="block text-sm font-medium text-gray-700">Port</label>
+            <input x-model="model.post" type="number" min="1" max="9999" name="port" id="port" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
+          </div>
+
+          <div class="col-span-6 sm:col-span-3">
+            <label for="username" class="block text-sm font-medium text-gray-700">Username/Email</label>
+            <input x-model="model.username" type="text" name="username" id="username" autocomplete="email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
+          </div>
+
+          <div class="col-span-6 sm:col-span-3">
+            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+            <input x-model="model.username" type="password" name="password" id="password" autocomplete="email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
+          </div>
+        </div>
+      </div>
+      <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+        <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          Save
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
