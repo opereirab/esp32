@@ -29,11 +29,11 @@ String CmdProcessor::process(const String& payload, size_t length) {
   }
   
   uint8_t cmd = req["cmd"].as<uint8_t>();
-  Serial.printf("%d: ", cmd);
+  // Serial.printf("%d: ", cmd);
   switch (cmd)
   {
     case CommandType::REQUEST_DEVICE_SETTINGS: {
-      Serial.println("REQUEST_DEVICE_SETTINGS");
+      // Serial.println("REQUEST_DEVICE_SETTINGS");
       StaticJsonDocument<1024> resp;
       resp["cmd"] = RESPONSE_DEVICE_SETTINGS;
 
@@ -60,7 +60,7 @@ String CmdProcessor::process(const String& payload, size_t length) {
       break;
     }
     case CommandType::REQUEST_NETWORK_SETTINGS: {
-      Serial.println("REQUEST_NETWORK_SETTINGS");
+      // Serial.println("REQUEST_NETWORK_SETTINGS");
 
       WiFi.scanNetworks(true);
 
@@ -140,14 +140,14 @@ String CmdProcessor::process(const String& payload, size_t length) {
         return output;
       }
 
-      Serial.println(payload);
+      // Serial.println(payload);
 
       JsonObject data = doc["data"].as<JsonObject>();
       const char* username = data["username"];
       const char* password = data["password"];
 
-      Serial.printf("Username: %s\n", settings.security.username.c_str());
-      Serial.printf("Password: %s\n", settings.security.password.c_str());
+      // Serial.printf("Username: %s\n", settings.security.username.c_str());
+      // Serial.printf("Password: %s\n", settings.security.password.c_str());
 
       if(settings.security.username.equalsIgnoreCase(username) && settings.security.password.equals(password)) {
         output = "true";
@@ -187,6 +187,24 @@ String CmdProcessor::process(const String& payload, size_t length) {
       break;
     }
 
+    case CommandType::REQUEST_SAVE_DEVICE_SETTINGS: {
+      StaticJsonDocument <16> dataFilter;
+      dataFilter["data"] = true;
+
+      StaticJsonDocument<255> doc;
+      DeserializationError e = deserializeJson(doc, payload.c_str(), DeserializationOption::Filter(dataFilter));
+      if(e != DeserializationError::Ok) {
+        return output;
+      }
+
+      JsonObject data = doc["data"].as<JsonObject>();
+      settings.device.name = data["name"] | "";
+      
+      if(settings.device.save()) {
+        serializeJson(doc, output);
+      }
+      break;
+    }
     case CommandType::REQUEST_SAVE_WIFI_SETTINGS: {
       StaticJsonDocument <16> dataFilter;
       dataFilter["data"] = true;

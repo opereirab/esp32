@@ -47,8 +47,8 @@ void ChannelsManager::setup()
     deserializeJson(doc, file, DeserializationOption::Filter(filter));
     
     // TODO: Remove this two lines
-    serializeJson(doc, Serial);
-    Serial.println();
+    // serializeJson(doc, Serial);
+    // Serial.println();
 
     const char* id = doc["id"].as<const char*>();
     uint8_t ch = doc["ch"].as<uint8_t>();
@@ -63,7 +63,7 @@ void ChannelsManager::setup()
   } while(file.findUntil(",","]"));
 
   file.close();
-  Serial.printf("Sensors: %d\n", count);
+  // Serial.printf("Sensors: %d\n", count);
 
   /*for(size_t i = 0; i < count; i++) {
     channels[i].setup();
@@ -87,7 +87,7 @@ void ChannelsManager::loop()
     doc["date"] = systemclock.Epoch64Time();
 
     // TODO: Notify to all listeners
-    serializeJson(doc, Serial);
+    // serializeJson(doc, Serial);
 
     if(!doc.isNull()) {
       doc.clear();

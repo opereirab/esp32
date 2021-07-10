@@ -208,7 +208,7 @@
             })
             .then(response => response.json())
             .then(data => {
-              console.log(data);
+              // console.log(data);
               this.model.deviceId = data.deviceId;
               this.model.channels = data.channels;
               hideLoading();
@@ -251,7 +251,7 @@
         })
         .then(response => response.json())
         .then(data => {
-          console.log(data);
+          // console.log(data);
           hideLoading();
         });
       }

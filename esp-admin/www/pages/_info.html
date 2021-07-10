@@ -25,24 +25,44 @@
               <dl class="divide-y divide-gray-200">
                 <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
                   <dt class="text-sm font-medium text-gray-500">
-                    Name
+                    <span class="h-full flex space-x-1 flex-shrink-0 items-center">
+                      Name
+                    </span>                    
                   </dt>
-                  <dd class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    <span class="flex-grow">Chelsea Hagon</span>
-                    <span class="ml-4 flex-shrink-0">
-                      <button type="button" class="bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
-                        Update
-                      </button>
-                    </span>
-                  </dd>
+                  <template x-if="!isDeviceNameEditingMode">
+                    <dd class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">                      
+                        <span x-html="model.device.name" class="flex-grow"></span>
+                        <span class="ml-4 flex-shrink-0">
+                          <button @click="isDeviceNameEditingMode = true" type="button" class="bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                            Edit
+                          </button>
+                        </span>
+                    </dd>
+                  </template>
+                  <template x-if="isDeviceNameEditingMode">                    
+                    <dd class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      <form x-ref="formDeviceName" method="POST" action="#" class="flex-grow" @submit="updateDeviceName($event)">
+                        <input x-model="model.device.name" type="text" name="text" id="text" autocomplete="email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
+                      </form>
+                      <span class="flex space-x-1 ml-4 flex-shrink-0 items-center">
+                        <button @click="$refs.formDeviceName.requestSubmit()" type="button" class="bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                          Update
+                        </button>
+                        <span class="text-gray-300" aria-hidden="true">|</span>
+                        <button @click="isDeviceNameEditingMode = false" type="button" class="bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                          Cancel
+                        </button>
+                      </span>
+                    </dd>
+                  </template>
                 </div>
                 <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:pt-5">
                   <dt class="text-sm font-medium text-gray-500">
                     Serial Number
                   </dt>
                   <dd class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    <span class="flex-grow">Chelsea Hagon</span>
-                    <span class="ml-4 flex-shrink-0 flex items-start space-x-4">
+                    <span x-html="model.device.serial" class="flex-grow"></span>
+                    <!-- <span class="ml-4 flex-shrink-0 flex items-start space-x-4">
                       <button type="button" class="bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
                         Update
                       </button>
@@ -50,7 +70,7 @@
                       <button type="button" class="bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
                         Remove
                       </button>
-                    </span>
+                    </span> -->
                   </dd>
                 </div>
                 <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:pt-5">
@@ -58,12 +78,12 @@
                     Type
                   </dt>
                   <dd class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    <span class="flex-grow">chelsea.hagon@example.com</span>
-                    <span class="ml-4 flex-shrink-0">
+                    <span x-html="model.device.type" class="flex-grow"></span>
+                    <!-- <span class="ml-4 flex-shrink-0">
                       <button type="button" class="bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
                         Update
                       </button>
-                    </span>
+                    </span> -->
                   </dd>
                 </div>
                 <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-b sm:border-gray-200">
@@ -71,7 +91,7 @@
                     Version
                   </dt>
                   <dd class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    <span class="flex-grow">1.0.0</span>
+                    <span x-html="model.device.version" class="flex-grow"></span>
                     <span class="ml-4 flex-shrink-0">
                       <button type="button" class="bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
                         Update

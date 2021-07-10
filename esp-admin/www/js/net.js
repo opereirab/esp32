@@ -102,7 +102,7 @@ function networkSettings() {
       })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
+        // console.log(data);
         hideLoading();
       });
 
@@ -130,7 +130,7 @@ function networkSettings() {
       })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
+        // console.log(data);
         hideLoading();
       });
 

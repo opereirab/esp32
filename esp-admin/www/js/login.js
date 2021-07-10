@@ -7,7 +7,7 @@ function securitySettings() {
     isDialogVisible: false,
     unauthorized: false,
     toggle() {
-      console.log("toogle");
+      // console.log("toogle");
       this.isDialogVisible = !this.isDialogVisible;
     },
     init() {

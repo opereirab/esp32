@@ -36,7 +36,7 @@ void Webserver::onWebSocketEvent(AsyncWebSocket * server, AsyncWebSocketClient *
 
 String Webserver::processor(const String& var)
 {
-  Serial.println(var);
+  // Serial.println(var);
   if(var == "PLACEHOLDER_SSID") {
     return settings.network.ssid;
   }
@@ -51,10 +51,10 @@ void Webserver::routes() {
       payload += (char)data[i];  
     }
     if(payload.length() < total) return;
-    Serial.println(payload);
+    // Serial.println(payload);
     String resp = cmdprocessor.process(payload, total);
     payload.clear();
-    Serial.println(resp);
+    // Serial.println(resp);
     request->send(200, "application/json", resp);   
   });
 }

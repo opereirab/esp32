@@ -20,8 +20,11 @@ struct DeviceSettings {
 
   bool load() {
     bool result = false;
-    if(!filesystem.exists(DB_PATH + "/device.json"))
+    if(!filesystem.exists(DB_PATH + "/device.json")) {
+      name = (String("ESP32-") + serialNum());
       return result;
+    }
+      
           
     File file = filesystem.open(DB_PATH + "/device.json");
     if (file) {
@@ -31,7 +34,7 @@ struct DeviceSettings {
         name = doc["name"] | (String("ESP32-") + serialNum()).c_str();
         result = true;
       } else {
-        name = (String("ESP32-") + serialNum()).c_str();
+        name = (String("ESP32-") + serialNum());
         result = false;
       }
       file.close();      
