@@ -5,6 +5,7 @@ function securitySettings() {
       password: ""
     },
     isDialogVisible: false,
+    unauthorized: false,
     toggle() {
       console.log("toogle");
       this.isDialogVisible = !this.isDialogVisible;
@@ -20,6 +21,11 @@ function securitySettings() {
       //   this.data = data;
       //   hideLoading();
       // });
+    },
+    keydown() {
+      if(this.unauthorized) {
+        this.unauthorized = false;
+      }
     },
     signin(event) {
       event.preventDefault();
@@ -39,6 +45,11 @@ function securitySettings() {
         if(data === true) {
           sessionStorage.setItem("DEVICE", JSON.stringify(this.data));
           window.location.href = "/";
+        } else {
+          this.unauthorized = true;
+          setTimeout(() => {
+            this.unauthorized = false;
+          }, 5000);
         }
         hideLoading();
       });
