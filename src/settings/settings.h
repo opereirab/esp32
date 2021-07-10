@@ -9,6 +9,7 @@ public:
   DeviceSettings device;
   NetworkSettings network;
   SecuritySettings security;
+  CloudSettings cloud;
 
 public:
   Settings(/* args */);

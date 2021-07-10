@@ -14,4 +14,10 @@ enum ProtocolType {
   PROTOCOL_TYPE_MODBUS  = 9,
 };
 
+enum CloudProtocolType {
+  CLOUD_PROTOCOL_TYPE_WS      = 0,
+  CLOUD_PROTOCOL_TYPE_MQTT    = 1,
+  CLOUD_PROTOCOL_TYPE_TCP     = 2,
+}
+
 #endif

@@ -15,6 +15,7 @@ void Settings::setup()
   security.load();
   device.load();
   network.load();
+  cloud.load();
 }
 
 void Settings::loop()

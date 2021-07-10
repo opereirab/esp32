@@ -2,6 +2,7 @@
 #define _ENTITIES_H_
 
 #include "definitions/constants.h"
+#include "definitions/protocols.h"
 #include "filesystem/filesystem.h"
 #include <ArduinoJson.h>
 #include <WiFi.h>
@@ -158,6 +159,64 @@ struct SecuritySettings {
       StaticJsonDocument<256> doc;
       doc["username"] = username;
       doc["password"] = password;
+      
+      size_t size = serializeJson(doc, file);
+      file.close();
+      result = (size > 0);
+    }
+    return result;
+  }
+};
+
+struct CloudSettings {
+  CloudProtocolType type;
+  
+  String host = "";
+  uint16_t port = 0;
+  
+  String username = "";
+  String password = "";
+
+  String topic = "";
+
+  bool load() {
+    bool result = false;
+    if(!filesystem.exists(DB_PATH + "/cloud.json"))
+      return result;
+          
+    File file = filesystem.open(DB_PATH + "/cloud.json");
+    if (file) {
+      StaticJsonDocument<1024> doc;
+      DeserializationError e = deserializeJson(doc, file);
+      if(e == DeserializationError::Ok) {
+        type = (CloudProtocolType) doc["type"].as<uint8_t>();
+        host = doc["host"] | "";
+        port = doc["port"].as<uint16_t>();      
+        username = doc["username"] | "";
+        password = doc["password"] | "";
+        topic = doc["topic"] | "";
+        result = true;
+      } else {
+        result = false;
+      }
+      file.close();      
+    }
+    return result;
+  }
+
+  bool save() {
+    bool result = false;
+    if(filesystem.exists(DB_PATH + "/cloud.json")) {
+      filesystem.remove(DB_PATH + "/cloud.json");
+    }
+    if (File file = filesystem.open(DB_PATH + "/cloud.json", "w")) {
+      StaticJsonDocument<1024> doc;
+      doc["type"] = type;
+      doc["host"] = host;
+      doc["port"] = port;
+      doc["username"] = username;
+      doc["password"] = password;
+      doc["topic"] = topic;
       
       size_t size = serializeJson(doc, file);
       file.close();
