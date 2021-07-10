@@ -8,6 +8,9 @@
 #include <WiFi.h>
 
 struct DeviceSettings {
+
+  String name;
+
   String serialNum() {
     uint64_t chipid = ESP.getEfuseMac();
     String serialNum  = String((uint16_t)(chipid>>32), HEX) + String((uint32_t)chipid, HEX);
@@ -16,11 +19,41 @@ struct DeviceSettings {
   }
 
   bool load() {
-    return true;
+    bool result = false;
+    if(!filesystem.exists(DB_PATH + "/device.json"))
+      return result;
+          
+    File file = filesystem.open(DB_PATH + "/device.json");
+    if (file) {
+      StaticJsonDocument<255> doc;
+      DeserializationError e = deserializeJson(doc, file);
+      if(e == DeserializationError::Ok) {
+        name = doc["name"] | (String("ESP32-") + serialNum()).c_str();
+        result = true;
+      } else {
+        name = (String("ESP32-") + serialNum()).c_str();
+        result = false;
+      }
+      file.close();      
+    }
+    return result;
   }
 
   bool save() {
-    return true;
+    bool result = false;
+    if(filesystem.exists(DB_PATH + "/device.json")) {
+      filesystem.remove(DB_PATH + "/device.json");
+    }
+    if (File file = filesystem.open(DB_PATH + "/device.json", "w")) {
+      StaticJsonDocument<255> doc;
+      
+      doc["name"] = name.c_str();
+      
+      size_t size = serializeJson(doc, file);
+      file.close();
+      result = (size > 0);
+    }
+    return result;
   }
 
 };
@@ -211,12 +244,13 @@ struct CloudSettings {
     }
     if (File file = filesystem.open(DB_PATH + "/cloud.json", "w")) {
       StaticJsonDocument<1024> doc;
-      doc["type"] = type;
-      doc["host"] = host;
+      
+      doc["type"] = (uint8_t) type;
+      doc["host"] = host.c_str();
       doc["port"] = port;
-      doc["username"] = username;
-      doc["password"] = password;
-      doc["topic"] = topic;
+      doc["username"] = username.c_str();
+      doc["password"] = password.c_str();
+      doc["topic"] = topic.c_str();
       
       size_t size = serializeJson(doc, file);
       file.close();

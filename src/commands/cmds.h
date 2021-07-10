@@ -39,6 +39,7 @@ enum CommandType {
   REQUEST_SAVE_DEVICE_CHANNELS                = 33,
   REQUEST_SAVE_DEVICE_RULES                   = 34,
   REQUEST_SAVE_MODBUS_SETTINGS                = 35,
+  REQUEST_SAVE_CLOUD_SETTINGS                 = 36,
 
   REQUEST_SIGNIN                              = 40,
   REQUEST_SYNC_DATETIME                       = 41,

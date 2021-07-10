@@ -34,8 +34,14 @@ String CmdProcessor::process(const String& payload, size_t length) {
   {
     case CommandType::REQUEST_DEVICE_SETTINGS: {
       Serial.println("REQUEST_DEVICE_SETTINGS");
-      StaticJsonDocument<385> resp;
+      StaticJsonDocument<1024> resp;
       resp["cmd"] = RESPONSE_DEVICE_SETTINGS;
+
+      JsonObject device = resp.createNestedObject("device");
+      device["name"] = settings.device.name;
+      device["serial"] = settings.device.serialNum();
+      device["type"] = DEVICE_TYPE;
+      device["version"] = VERSION;
       
       JsonObject wifi = resp.createNestedObject("wifi");
       wifi["connected"] = WiFi.isConnected();
@@ -113,12 +119,12 @@ String CmdProcessor::process(const String& payload, size_t length) {
     case CommandType::REQUEST_CLOUD_SETTINGS: {
       StaticJsonDocument<1024> resp;
       
-      resp["type"] = settings.cloud.type;
-      resp["host"] = settings.cloud.host;
+      resp["type"] = (uint8_t) settings.cloud.type;
+      resp["host"] = settings.cloud.host.c_str();
       resp["port"] = settings.cloud.port;
-      resp["username"] = settings.cloud.username;
-      resp["password"] = settings.cloud.password;
-      resp["topic"] = settings.cloud.topic;
+      resp["username"] = settings.cloud.username.c_str();
+      resp["password"] = settings.cloud.password.c_str();
+      resp["topic"] = settings.cloud.topic.c_str();
 
       serializeJson(resp, output);
       break;
@@ -244,6 +250,31 @@ String CmdProcessor::process(const String& payload, size_t length) {
       if(file = filesystem.open(DB_PATH + "/channels.json")) {
         output = file.readString();
         file.close();
+      }
+
+      break;
+    }
+    case CommandType::REQUEST_SAVE_CLOUD_SETTINGS: {
+      StaticJsonDocument <16> dataFilter;
+      dataFilter["data"] = true;
+
+      StaticJsonDocument<1024> doc;
+      DeserializationError e = deserializeJson(doc, payload.c_str(), DeserializationOption::Filter(dataFilter));
+      if(e != DeserializationError::Ok) {
+        return output;
+      }
+
+      JsonObject data = doc["data"].as<JsonObject>();
+
+      settings.cloud.type = (CloudProtocolType) data["type"].as<uint8_t>();
+      settings.cloud.host = data["host"] | "";
+      settings.cloud.port = data["port"].as<uint16_t>();
+      settings.cloud.username = data["username"] | "";
+      settings.cloud.password = data["password"] | "";
+      settings.cloud.topic = data["topic"] | "";
+
+      if(settings.cloud.save()) {
+        serializeJson(doc, output);
       }
 
       break;

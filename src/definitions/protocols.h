@@ -17,6 +17,6 @@ enum ProtocolType {
 enum CloudProtocolType {
   CLOUD_PROTOCOL_TYPE_WS      = 0,
   CLOUD_PROTOCOL_TYPE_MQTT    = 1
-}
+};
 
 #endif
