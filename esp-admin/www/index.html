@@ -79,7 +79,7 @@
   <!-- BEGIN REGION NAVBAR -->  
   <div class="sticky top-0 z-40 bg-white">
     <div class="absolute inset-0 shadow z-30 pointer-events-none" aria-hidden="true"></div>
-    <div class="relative z-20">
+    <div class="relative">
       <div class="max-w-7xl mx-auto flex justify-between items-center px-4 py-5 sm:px-6 sm:py-4 lg:px-8 md:justify-start md:space-x-10">
         <div>
           <a href="javascript:;" class="flex" @click="dashboard()">
@@ -102,15 +102,47 @@
             <a href="javascript:;" @click="dashboard()" class="text-base font-medium text-gray-500 hover:text-gray-900">
               Dashboard
             </a>
-            <a href="javascript:;" @click="settings()" class="text-base font-medium text-gray-500 hover:text-gray-900">
+            <a x-show="isAuthenticated()" href="javascript:;" @click="settings()" class="text-base font-medium text-gray-500 hover:text-gray-900">
               Settings
             </a>            
           </nav>
           <div class="flex items-center md:ml-12">
-            <!-- <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">
-              Sign in
-            </a> -->
-            <a href="javascript:;" @click="login()" class="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+            <div x-show="isAuthenticated()" @click.away="closeUserMenuAll()"  class="relative">
+              <button @click="toggleUserMenu()" type="button" class="group text-gray-500 hover:text-gray-900 max-w-xs bg-white rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 lg:p-2 lg:rounded-md lg:hover:bg-gray-50" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                <span class="inline-block h-8 w-8 rounded-full overflow-hidden bg-gray-100 p-1 group">
+                  <svg class="h-full w-full" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M21.1,12.5L22.5,13.91L15.97,20.5L12.5,17L13.9,15.59L15.97,17.67L21.1,12.5M10,17L13,20H3V18C3,15.79 6.58,14 11,14L12.89,14.11L10,17M11,4A4,4 0 0,1 15,8A4,4 0 0,1 11,12A4,4 0 0,1 7,8A4,4 0 0,1 11,4Z" />
+                  </svg>
+                </span>
+                <span x-text="user()?.username || ''" class="hidden ml-3 text-sm font-medium lg:block uppercase"></span>
+                <!-- Heroicon name: solid/chevron-down -->
+                <svg class="hidden flex-shrink-0 ml-1 h-5 w-5 text-gray-400 lg:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </button>
+              <!--
+                Dropdown menu, show/hide based on menu state.
+
+                Entering: "transition ease-out duration-100"
+                  From: "transform opacity-0 scale-95"
+                  To: "transform opacity-100 scale-100"
+                Leaving: "transition ease-in duration-75"
+                  From: "transform opacity-100 scale-100"
+                  To: "transform opacity-0 scale-95"
+              -->
+              <div
+                x-show="userMenu.isOpened" 
+                x-transition:enter="transition ease-out duration-100"
+                x-transition:enter-start="transform opacity-0 scale-95"
+                x-transition:enter-end="transform opacity-100 scale-100"
+                x-transition:leave="transition ease-in duration-75"
+                x-transition:leave-start="transform opacity-100 scale-100"
+                x-transition:leave-end="transform opacity-0 scale-95"                              
+                class="z-50 origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                <a href="javascript:;" @click="logout()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-2">Logout</a>
+              </div>
+            </div>
+            <a x-show="!isAuthenticated()" href="javascript:;" @click="login()" class="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
               Sign in
             </a>
           </div>
@@ -160,7 +192,7 @@
                   </div>
                 </a>
   
-                <a @click="settings()" href="javascript:;" class="-m-3 flex items-center p-3 rounded-lg hover:bg-gray-50">
+                <a x-show="isAuthenticated()" @click="settings()" href="javascript:;" class="-m-3 flex items-center p-3 rounded-lg hover:bg-gray-50">
                   <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-indigo-500 text-white sm:h-12 sm:w-12">
                     <!-- Heroicon name: outline/cursor-click -->
                     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -180,6 +212,14 @@
           </div>
         </div>
         <div class="py-6 px-5">
+          <div x-show="isAuthenticated()" class="flex flex-col items-center text-gray-900">
+            <span class="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100 p-1 group">
+              <svg class="h-full w-full" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M21.1,12.5L22.5,13.91L15.97,20.5L12.5,17L13.9,15.59L15.97,17.67L21.1,12.5M10,17L13,20H3V18C3,15.79 6.58,14 11,14L12.89,14.11L10,17M11,4A4,4 0 0,1 15,8A4,4 0 0,1 11,12A4,4 0 0,1 7,8A4,4 0 0,1 11,4Z" />
+              </svg>
+            </span>
+            <span x-text="user()?.username || ''" class="mt-3 text-sm font-medium lg:block uppercase"></span>
+          </div>          
           <!-- <div class="grid grid-cols-2 gap-4">
             <a href="#" class="rounded-md text-base font-medium text-gray-900 hover:text-gray-700">
               Pricing
@@ -206,8 +246,11 @@
             </a>
           </div> -->
           <div class="mt-6">
-            <a href="#" class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-              Sign up
+            <a x-show="!isAuthenticated()" @click="login()" href="javascript:;" class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+              Signin
+            </a>
+            <a x-show="isAuthenticated()" @click="logout()" href="javascript:;" class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+              Logout
             </a>
             <!-- <p class="mt-6 text-center text-base font-medium text-gray-500">
               Existing customer?
@@ -288,6 +331,7 @@
   <script src="./js/moment.min.js" defer></script>
   <script src="./js/commands.js"></script>
   <script src="./js/index.js"></script>
+  <script src="./js/login.js"></script>
   <script src="./js/info.js"></script>
   <script src="./js/dashboard.js"></script>
   <script src="./js/net.js"></script>

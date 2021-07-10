@@ -24,8 +24,7 @@ struct DeviceSettings {
 
 };
 
-struct NetworkSettings
-{
+struct NetworkSettings {
   char ssid[33] = { '\0' };
   char password[64] = { '\0' };
   char passphrase[64] = { '\0' };
@@ -121,5 +120,51 @@ struct NetworkSettings
   }
 };
 
+struct SecuritySettings {
+  String username;
+  String password;
+
+  bool load() {
+    bool result = false;
+    if(!filesystem.exists(DB_PATH + "/security.json")) {
+      username = DEFAULT_USERNAME;
+      password = DEFAULT_PASSWORD;
+      return result;
+    }
+      
+
+    File file = filesystem.open(DB_PATH + "/security.json");
+    if (file) {
+      StaticJsonDocument<256> doc;
+      DeserializationError e = deserializeJson(doc, file);
+      if(e == DeserializationError::Ok) {
+        username = doc["username"] | DEFAULT_USERNAME;
+        password = doc["password"] | DEFAULT_PASSWORD;
+        result = true;
+      } else {
+        result = false;
+      }
+      file.close();      
+    }
+    return result;  
+  } 
+
+  bool save() {
+    bool result = false;
+    if(filesystem.exists(DB_PATH + "/security.json")) {
+      filesystem.remove(DB_PATH + "/security.json");
+    }
+    if (File file = filesystem.open(DB_PATH + "/security.json", "w")) {
+      StaticJsonDocument<256> doc;
+      doc["username"] = username;
+      doc["password"] = password;
+      
+      size_t size = serializeJson(doc, file);
+      file.close();
+      result = (size > 0);
+    }
+    return result;
+  }
+};
 
 #endif

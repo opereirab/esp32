@@ -111,6 +111,63 @@ String CmdProcessor::process(const String& payload, size_t length) {
       break;
     }
 
+    case CommandType::REQUEST_SIGNIN: {
+      StaticJsonDocument <16> dataFilter;
+      dataFilter["data"] = true;
+
+      StaticJsonDocument<256> doc;
+      DeserializationError e = deserializeJson(doc, payload.c_str(), DeserializationOption::Filter(dataFilter));
+      if(e != DeserializationError::Ok) {
+        return output;
+      }
+
+      Serial.println(payload);
+
+      JsonObject data = doc["data"].as<JsonObject>();
+      const char* username = data["username"];
+      const char* password = data["password"];
+
+      Serial.printf("Username: %s\n", settings.security.username.c_str());
+      Serial.printf("Password: %s\n", settings.security.password.c_str());
+
+      if(settings.security.username.equalsIgnoreCase(username) && settings.security.password.equals(password)) {
+        output = "true";
+      } else {
+        output = "false";
+      }
+      break;
+    }
+    case CommandType::REQUEST_SAVE_SECURITY_SETTINGS: {
+      StaticJsonDocument <16> dataFilter;
+      dataFilter["data"] = true;
+
+      StaticJsonDocument<256> doc;
+      DeserializationError e = deserializeJson(doc, payload.c_str(), DeserializationOption::Filter(dataFilter));
+      if(e != DeserializationError::Ok) {
+        return output;
+      }
+
+      JsonObject data = doc["data"].as<JsonObject>();
+      settings.security.username = data["username"].as<String>();
+      settings.security.password = data["password"].as<String>();
+      
+      if(settings.security.save()) {
+        serializeJson(doc, output);
+      }
+      break;
+    }
+    case CommandType::REQUEST_RESET_SECURITY_SETTINGS: {
+      settings.security.username = DEFAULT_USERNAME;
+      settings.security.password = DEFAULT_PASSWORD;
+      
+      if(settings.security.save()) {
+        output = "true";
+      } else {
+        output = "false";
+      }
+      break;
+    }
+
     case CommandType::REQUEST_SAVE_WIFI_SETTINGS: {
       StaticJsonDocument <16> dataFilter;
       dataFilter["data"] = true;

@@ -50,7 +50,11 @@ function body() {
         this.isOpened = !this.isOpened;
       }
     },
+    userMenu: {
+      isOpened: false
+    },
     login() {
+      this.closeAll();
       showLoading();
       fetch("/pages/login.html")
         .then(response => response.text())
@@ -58,6 +62,11 @@ function body() {
           setHtml(document.getElementById("main-content"), html);
           hideLoading();
         })
+    },
+    logout() {      
+      this.closeAll();
+      sessionStorage.removeItem("DEVICE");      
+      this.login();
     },
     dashboard() {
       showLoading();
@@ -101,7 +110,26 @@ function body() {
         console.log(data);
         this.closeUpdateTimeDialog();
       });
+    },
+    toggleUserMenu() {
+      this.userMenu.isOpened = !this.userMenu.isOpened;
+    },
+    closeUserMenuAll() {
+      this.userMenu.isOpened = false;
+    },
+    user() {
+      let data = sessionStorage.getItem("DEVICE");
+      if(data !== undefined && data !== null) {
+        let user = JSON.parse(data);
+        return user;
+      }
+      return null;
+    },
+    isAuthenticated() {
+      let user = this.user();
+      return (user !== undefined && user !== null && user.username !== undefined && user.username !== null);
     }
+    
   }
 }
 

@@ -8,6 +8,7 @@ class Settings
 public:
   DeviceSettings device;
   NetworkSettings network;
+  SecuritySettings security;
 
 public:
   Settings(/* args */);

@@ -12,6 +12,7 @@ Settings::~Settings()
 
 void Settings::setup()
 {
+  security.load();
   device.load();
   network.load();
 }

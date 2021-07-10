@@ -19,6 +19,9 @@
 
 #define DB_PATH String("/db")
 
+#define DEFAULT_USERNAME  "admin"
+#define DEFAULT_PASSWORD  "admin"
+
 #define DEFAULT_STA_WIFI_SSID "TP-Link_D9F8"
 #define DEFAULT_STA_WIFI_PASSWORD "67974962"
 #define DEFAULT_AP_WIFI_PASSWORD ""

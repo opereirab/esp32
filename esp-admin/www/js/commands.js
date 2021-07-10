@@ -39,6 +39,7 @@ var CommandType = {
   REQUEST_SIGNIN                              : 40,
   REQUEST_SYNC_DATETIME                       : 41,
 
+  REQUEST_RESET_SECURITY_SETTINGS             : 254,
   REQUEST_RESTART                             : 255,
 
   RESPONSE_DEVICE_SETTINGS                    : 101,
