@@ -52,7 +52,7 @@ String SystemClock::getTime()
 
     return String(datestring);
   }
-  Serial.println("RTC lost confidence in the DateTime!");
+  // Serial.println("RTC lost confidence in the DateTime!");
   return softRtc.getTime("%d/%m/%Y %H:%M:%S");
 }
 

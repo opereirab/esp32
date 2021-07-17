@@ -2,6 +2,7 @@
 #include "commands/cmds.h"
 #include "filesystem/filesystem.h"
 #include "clock/systemclock.h"
+#include "notify/notifier.h"
 
 ChannelsManager mng;
 
@@ -76,6 +77,7 @@ void ChannelsManager::loop()
     
     const size_t capacity = JSON_OBJECT_SIZE(3) + JSON_ARRAY_SIZE(count + 1) +  (count + 1)*(JSON_OBJECT_SIZE(2) + JSON_ARRAY_SIZE(7)) + 255;
     DynamicJsonDocument doc(capacity);
+    
     doc["cmd"] = RESPONSE_SENSORS_VALUES;
     JsonArray data = doc.createNestedArray("data");
 
@@ -86,8 +88,7 @@ void ChannelsManager::loop()
 
     doc["date"] = systemclock.Epoch64Time();
 
-    // TODO: Notify to all listeners
-    // serializeJson(doc, Serial);
+    notifier.notify(doc);
 
     if(!doc.isNull()) {
       doc.clear();

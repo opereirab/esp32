@@ -177,7 +177,8 @@ function process(payload) {
       // $dispatch('updateNetworks', ) ;
       break;
     }
-    default: {
+    case CommandType.RESPONSE_SENSORS_VALUES : {
+      // console.log(payload); 
       try {
         /*console.log(new Intl.DateTimeFormat('default', {
           year: 'numeric', month: 'numeric', day: 'numeric',
@@ -188,14 +189,45 @@ function process(payload) {
 
         let elem = document.getElementById("datetime");
         if(elem) {
-          elem.innerHTML = moment.unix(payload).utc().format('DD/MM/YYYY HH:mm:ss');
+          elem.innerHTML = moment.unix(payload.date).utc().format('DD/MM/YYYY HH:mm:ss');
         }
+
+        payload.data?.forEach(ch => {          
+          ch.values?.forEach((s, i) => {
+            let id = "sensor-value-" + ch.id + "-" + i;
+            elem = document.getElementById(id);
+            if(elem) {
+              elem.innerHTML = ch.values[i];
+            }
+          })
+          
+        });
         // console.log(moment.unix(payload).utc().format('DD/MM/YYYY HH:mm:ss'));
         // console.log(new Date(payload*1000).toString());
       } catch (error) {
         console.log(payload);  
-      }           
-      
+      }
+      break;
+    }
+    default: {
+      // try {
+      //   /*console.log(new Intl.DateTimeFormat('default', {
+      //     year: 'numeric', month: 'numeric', day: 'numeric',
+      //     hour: 'numeric', minute: 'numeric', second: 'numeric',
+      //     hour12: false,
+      //     timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,          
+      //   }).format(payload*1000), new Date(payload*1000).toTimeString().slice(9));*/
+
+      //   let elem = document.getElementById("datetime");
+      //   if(elem) {
+      //     elem.innerHTML = moment.unix(payload).utc().format('DD/MM/YYYY HH:mm:ss');
+      //   }
+      //   // console.log(moment.unix(payload).utc().format('DD/MM/YYYY HH:mm:ss'));
+      //   // console.log(new Date(payload*1000).toString());
+      // } catch (error) {
+      //   console.log(payload);  
+      // }           
+      console.log(payload);  
       break;
     }          
   }

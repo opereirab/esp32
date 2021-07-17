@@ -59,6 +59,7 @@ void PZEM004tSensor::loop(JsonObject& doc)
 	values.add<float>(current);
 	values.add<float>(power);
 	values.add<float>(energy);
+    values.add<float>(frequency);
 	values.add<float>(pf);
 
     display128x64.drawPZEM004t(voltage, current, power, pf, frequency, energy);
