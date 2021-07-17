@@ -20,7 +20,7 @@ void Notifier::notify(JsonDocument &doc)
     // display128x64.drawPZEM004t()
     // TODO:
     // wsc.send()
-    serializeJson(doc, Serial);
+    // serializeJson(doc, Serial);
     CommandType cmd = (CommandType) doc["cmd"].as<uint8_t>();
     webserver.sendEvent(cmd, doc);
 }
