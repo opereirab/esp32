@@ -11,7 +11,7 @@ class Webserver
 {
 private:
   AsyncWebServer server;
-  AsyncWebSocket ws; // access at ws://[esp ip]/ws
+  // AsyncWebSocket ws; // access at ws://[esp ip]/ws
   AsyncEventSource events; // event source (Server-Sent events)
 
 public:

@@ -5,7 +5,7 @@
 Webserver webserver;
 
 Webserver::Webserver(/* args */) 
-  : server(80), ws("/ws"), events("/events")
+  : server(80), /*ws("/ws"),*/ events("/events")
 {
 }
 
@@ -13,7 +13,8 @@ Webserver::~Webserver()
 {
 }
 
-void Webserver::onRequest(AsyncWebServerRequest *request){
+void Webserver::onRequest(AsyncWebServerRequest *request)
+{
   //Handle Unknown Request
   if (request->method() == HTTP_OPTIONS) {
     request->send(200);
@@ -22,7 +23,8 @@ void Webserver::onRequest(AsyncWebServerRequest *request){
   }
 }
 
-void Webserver::onBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
+void Webserver::onBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
   //Handle body
 }
 
@@ -30,8 +32,38 @@ void Webserver::onUpload(AsyncWebServerRequest *request, String filename, size_t
   //Handle upload
 }
 
-void Webserver::onWebSocketEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type, void * arg, uint8_t *data, size_t len){
-  //Handle WebSocket event
+void Webserver::onWebSocketEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type, void * arg, uint8_t *data, size_t len)
+{
+  switch (type)
+  {
+    case WS_EVT_CONNECT: 
+    {
+      Serial.println("New ws client connected");
+      break;
+    }
+    case WS_EVT_DISCONNECT: 
+    {
+      Serial.println("Ws client disconnected");
+      break;
+    }
+    case WS_EVT_PONG:
+    case WS_EVT_ERROR: 
+    {
+      // webserver.ws.close(client->id());
+      break;
+    }
+    case WS_EVT_DATA:
+    {      
+      // String resp = cmdprocessor.process((const char*) data, len);
+      // if(client != NULL && webserver.ws.hasClient(client->id()) && !resp.isEmpty())
+      // {        
+      //   client->text(resp);
+      // }
+      break;
+    }
+    default:
+      break;
+  }
 }
 
 String Webserver::processor(const String& var)
@@ -83,8 +115,13 @@ void Webserver::setup()
   DefaultHeaders::Instance().addHeader("Access-Control-Allow-Headers", "*");
 
   // attach AsyncWebSocket
-  ws.onEvent(&Webserver::onWebSocketEvent);
-  server.addHandler(&ws);
+  // ws.onEvent(&Webserver::onWebSocketEvent);
+  // ws.setAuthentication(
+  //   settings.security.username.c_str(), 
+  //   settings.security.password.c_str()
+  // );
+  // attach Websocket Server
+  // server.addHandler(&ws);
 
   // attach AsyncEventSource  
   server.addHandler(&events);

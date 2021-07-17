@@ -6,6 +6,8 @@
 
 #include "network/network.h"
 #include "webserver/webserver.h"
+#include "websockets/WebSocketServer.h"
+#include "websockets/WebSocketClient.h"
 #include "channels/channelsmanager.h"
 
 #include "display/LCDDisplay128x64.h"
@@ -27,16 +29,18 @@ void loop1(void*) {
 
 void setup() {
 
+  display128x64.setup();
+  
   Serial.begin(115200);
   systemclock.setup();
   filesystem.setup();
   settings.setup();
   network.setup();
   webserver.setup();
+  wss.setup();
+  // wsc.setup();
   mng.setup();
-  display128x64.setup();
-
-
+  
   xTaskCreatePinnedToCore(
     loop1,
     "loop1",
@@ -48,8 +52,9 @@ void setup() {
   );
 }
 
-void loop() {	  
-  // mng.loop();
+void loop() {
+  wss.loop();	  
+  // wsc.loop();
   display128x64.loop();
   yield();
 }
