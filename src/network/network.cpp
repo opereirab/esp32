@@ -6,6 +6,7 @@
 Network network;
 
 Network::Network(/* args */)
+  : aviableNetworks(0)
 {
 }
 
@@ -22,11 +23,11 @@ void Network::onEvent(system_event_id_t event, system_event_info_t info)
     }
     case SYSTEM_EVENT_SCAN_DONE: {
       // Serial.printf("SYSTEM_EVENT_SCAN_DONE: %d", info.scan_done.number);
-      const size_t capacity = info.scan_done.number;
-      DynamicJsonDocument doc(JSON_OBJECT_SIZE(2) + JSON_ARRAY_SIZE(capacity) + capacity * JSON_OBJECT_SIZE(3) + 210);
+      network.aviableNetworks = info.scan_done.number;
+      DynamicJsonDocument doc(JSON_OBJECT_SIZE(2) + JSON_ARRAY_SIZE(network.aviableNetworks) + network.aviableNetworks * JSON_OBJECT_SIZE(3) + 210);
       doc["cmd"] = RESPONSE_SYSTEM_EVENT_SCAN_DONE;
       JsonArray networks = doc.createNestedArray("networks");
-      for(int i = 0; i < capacity; i++) {
+      for(int i = 0; i < network.aviableNetworks; i++) {
         JsonObject net = networks.createNestedObject();
         net["ssid"] = WiFi.SSID(i);
         net["rssi"] = WiFi.RSSI(i);
@@ -140,6 +141,16 @@ void Network::setup()
   if(MDNS.begin("esp32")) {
     MDNS.addService("http", "tcp", DEFAULT_HTTP_PORT);
   }
+
+  long start = millis();
+  while (WiFi.status() != WL_CONNECTED && (millis() - start < 5000)) {
+    Serial.print('.');
+    delay(1000);
+  }
+  Serial.println("");
+
+  this->aviableNetworks = WiFi.scanNetworks();
+  Serial.println(aviableNetworks);
 }
 
 void Network::loop()

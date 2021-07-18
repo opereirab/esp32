@@ -6,7 +6,7 @@
 WebSocketServer wss;
 
 WebSocketServer::WebSocketServer() 
-    : ws(DEFAULT_WSS_PORT, "/ws")
+    : ws(DEFAULT_WSS_PORT, "/")
 {    
 }
 
@@ -82,10 +82,11 @@ size_t WebSocketServer::connectedClients() {
 }
 
 void WebSocketServer::sendBroadcast(JsonDocument &doc)
-{
+{    
     if(ws.connectedClients() > 0) {
         String payload = "";
         serializeJson(doc, payload);
+        // serializeJson(doc, Serial);
         ws.broadcastTXT(payload.c_str(), payload.length());
     }
 }

@@ -72,7 +72,7 @@ void WebSocketClient::setup()
             settings.cloud.username.c_str(), 
             settings.cloud.password.c_str()
         );*/
-        // ws.setReconnectInterval(60000);
+        ws.setReconnectInterval(60000);
         // ws.enableHeartbeat(1000, 1000, 1);
     }
 }

@@ -1,7 +1,7 @@
 
 var host = "192.168.0.103"
 var url = "http://" + host;
-var ws = "ws://admin:admin@" + host + ":8080/ws";
+var ws = "ws://admin:admin@" + host + ":8080";
 
 function setHtml(elm, html) {
   elm.innerHTML = html;
@@ -242,9 +242,14 @@ function connectWebSocket() {
     console.log("Websocket Connected");
   };
 
-  websocket.onmessage = function(e) {
-    let payload = JSON.parse(e.data);          
-    process(payload);
+  websocket.onmessage = function(e) {    
+    try {
+      let payload = JSON.parse(e.data);          
+      process(payload);  
+    } catch (error) {
+      console.error("Error processing paylod");
+      console.log(e.data);
+    }    
   };
 
   websocket.onclose = function(e) {

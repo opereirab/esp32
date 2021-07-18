@@ -10,7 +10,7 @@
 class Network
 {
 private:
-  // DNSServer dns;
+  uint16_t aviableNetworks;
 
 public:
   Network();
@@ -22,6 +22,9 @@ private:
 public:
   void setup();
   void loop();
+
+public:
+    
 
 };
 
