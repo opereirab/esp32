@@ -81,24 +81,18 @@ size_t WebSocketServer::connectedClients() {
     return ws.connectedClients();
 }
 
-void WebSocketServer::sendBroadcastExcept(const char* payload, size_t size, const IPAddress& exceptAdd)
+void WebSocketServer::sendBroadcast(JsonDocument &doc)
 {
-    // int connectedClients = wss.ws->connectedClients();
-    // for(int i = 0; i < connectedClients; i++) {
-    //     IPAddress add = ws->remoteIP(i);
-    //     if(add != exceptAdd) {
-    //         wss.ws->sendTXT(i, (const char*)payload, size);
-    //     }
-    // }       
+    if(ws.connectedClients() > 0) {
+        String payload = "";
+        serializeJson(doc, payload);
+        ws.broadcastTXT(payload.c_str(), payload.length());
+    }
 }
 
-void WebSocketServer::sendTo(const char* payload, size_t size, const IPAddress& addSender) 
+void WebSocketServer::sendBroadcast(const char* payload, size_t size) 
 {
-    // int connectedClients = wss.ws->connectedClients();
-    // for(int i = 0; i < connectedClients; i++) {
-    //     IPAddress add = ws->remoteIP(i);
-    //     if(add == addSender) {
-    //         wss.ws->sendTXT(i, (const char*)payload, size);
-    //     }
-    // }
+    if(ws.connectedClients() > 0) {
+        ws.broadcastTXT(payload, size);
+    }
 }

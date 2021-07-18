@@ -1,7 +1,7 @@
 #ifndef _WEBSOCKET_SERVER_H_
 #define _WEBSOCKET_SERVER_H_
 
-#include <Arduino.h>
+#include "definitions/constants.h"
 #include <WebSocketsServer.h>
 
 class WebSocketServer
@@ -24,8 +24,8 @@ class WebSocketServer
         size_t connectedClients();
     
     public:
-        void sendBroadcastExcept(const char* payload, size_t size, const IPAddress& exceptAdd);
-        void sendTo(const char* payload, size_t size, const IPAddress& addSender);
+        void sendBroadcast(JsonDocument &doc);
+        void sendBroadcast(const char* payload, size_t size);
 
 };
 

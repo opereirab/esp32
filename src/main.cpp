@@ -38,7 +38,7 @@ void setup() {
   network.setup();
   webserver.setup();
   wss.setup();
-  // wsc.setup();
+  wsc.setup();
   mng.setup();
   
   xTaskCreatePinnedToCore(
@@ -54,7 +54,7 @@ void setup() {
 
 void loop() {
   wss.loop();	  
-  // wsc.loop();
+  wsc.loop();
   display128x64.loop();
   yield();
 }

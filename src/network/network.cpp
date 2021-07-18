@@ -1,6 +1,7 @@
 #include "network.h"
 #include "settings/settings.h"
-#include "webserver/webserver.h"
+#include "commands/cmds.h"
+#include "websockets/WebSocketServer.h"
 
 Network network;
 
@@ -31,7 +32,7 @@ void Network::onEvent(system_event_id_t event, system_event_info_t info)
         net["rssi"] = WiFi.RSSI(i);
         net["ch"] = WiFi.channel(i);
       }
-      webserver.sendEvent(RESPONSE_SYSTEM_EVENT_SCAN_DONE, doc);
+      wss.sendBroadcast(doc);
       doc.clear();
       break;
     }
@@ -82,14 +83,14 @@ void Network::onEvent(system_event_id_t event, system_event_info_t info)
       StaticJsonDocument<32> doc;
       doc["cmd"] = RESPONSE_SYSTEM_EVENT_AP_STACONNECTED;
       doc["data"] = WiFi.softAPgetStationNum();
-      webserver.sendEvent(RESPONSE_SYSTEM_EVENT_AP_STACONNECTED, doc);
+      wss.sendBroadcast(doc);
       break;
     }
     case SYSTEM_EVENT_AP_STADISCONNECTED: {
       StaticJsonDocument<32> doc;
       doc["cmd"] = RESPONSE_SYSTEM_EVENT_AP_STADISCONNECTED;
       doc["data"] = WiFi.softAPgetStationNum();
-      webserver.sendEvent(RESPONSE_SYSTEM_EVENT_AP_STADISCONNECTED, doc);
+      wss.sendBroadcast(doc);
       break;
     }
     case SYSTEM_EVENT_AP_STAIPASSIGNED: {

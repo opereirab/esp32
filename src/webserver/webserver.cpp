@@ -5,7 +5,7 @@
 Webserver webserver;
 
 Webserver::Webserver(/* args */) 
-  : server(80), /*ws("/ws"),*/ events("/events")
+  : server(DEFAULT_HTTP_PORT)
 {
 }
 
@@ -32,49 +32,6 @@ void Webserver::onUpload(AsyncWebServerRequest *request, String filename, size_t
   //Handle upload
 }
 
-void Webserver::onWebSocketEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type, void * arg, uint8_t *data, size_t len)
-{
-  switch (type)
-  {
-    case WS_EVT_CONNECT: 
-    {
-      Serial.println("New ws client connected");
-      break;
-    }
-    case WS_EVT_DISCONNECT: 
-    {
-      Serial.println("Ws client disconnected");
-      break;
-    }
-    case WS_EVT_PONG:
-    case WS_EVT_ERROR: 
-    {
-      // webserver.ws.close(client->id());
-      break;
-    }
-    case WS_EVT_DATA:
-    {      
-      // String resp = cmdprocessor.process((const char*) data, len);
-      // if(client != NULL && webserver.ws.hasClient(client->id()) && !resp.isEmpty())
-      // {        
-      //   client->text(resp);
-      // }
-      break;
-    }
-    default:
-      break;
-  }
-}
-
-String Webserver::processor(const String& var)
-{
-  // Serial.println(var);
-  if(var == "PLACEHOLDER_SSID") {
-    return settings.network.ssid;
-  }
-  return "";
-}
-
 void Webserver::routes() {
   server.on("/command", HTTP_POST, [](AsyncWebServerRequest * request) { }, NULL, 
     [](AsyncWebServerRequest * request, uint8_t *data, size_t len, size_t index, size_t total) {
@@ -91,41 +48,13 @@ void Webserver::routes() {
   });
 }
 
-void Webserver::sendEvent(CommandType cmd, JsonDocument& doc)
-{
-  if(events.count() > 0) {    
-    String message = "";
-    serializeJson(doc, message);
-    events.send(message.c_str());
-  }
-}
-
-void Webserver::sendEvent(CommandType cmd, const char* payload)
-{
-  if(events.count() > 0) {    
-    events.send(payload);
-  }
-}
-
 void Webserver::setup()
 {
   DefaultHeaders::Instance().addHeader("Access-Control-Allow-Credentials", "true");
   DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
   DefaultHeaders::Instance().addHeader("Access-Control-Allow-Methods", "*");
   DefaultHeaders::Instance().addHeader("Access-Control-Allow-Headers", "*");
-
-  // attach AsyncWebSocket
-  // ws.onEvent(&Webserver::onWebSocketEvent);
-  // ws.setAuthentication(
-  //   settings.security.username.c_str(), 
-  //   settings.security.password.c_str()
-  // );
-  // attach Websocket Server
-  // server.addHandler(&ws);
-
-  // attach AsyncEventSource  
-  server.addHandler(&events);
-
+  
   routes();
 
   // attach filesystem root at URL /fs

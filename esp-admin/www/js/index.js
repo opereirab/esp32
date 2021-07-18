@@ -1,6 +1,7 @@
 
-var url = "http://192.168.0.103";
-// var url = "";
+var host = "192.168.0.103"
+var url = "http://" + host;
+var ws = "ws://admin:admin@" + host + ":8080/ws";
 
 function setHtml(elm, html) {
   elm.innerHTML = html;
@@ -233,29 +234,35 @@ function process(payload) {
   }
 }
 
-function initializeEvents() {
-  if(window.EventSource) {
-    var source = new EventSource(url + '/events');
+function connectWebSocket() {
 
-    source.onopen = (ev) => {
-      console.log("Events Connected");
-    }
+  let websocket = new WebSocket(ws);
 
-    source.onerror = (ev) => {
-      if (e.target.readyState != EventSource.OPEN) {
-        console.log("Events Disconnected");
-      }
-    }
+  websocket.onopen = function() {
+    console.log("Websocket Connected");
+  };
 
-    source.onmessage = (ev) => {
-      let payload = JSON.parse(ev.data);          
-      process(payload);
-    }
-  }
+  websocket.onmessage = function(e) {
+    let payload = JSON.parse(e.data);          
+    process(payload);
+  };
+
+  websocket.onclose = function(e) {
+    console.log('Websocket is closed. Reconnect will be attempted in 1 second.', e.reason);
+    websocket = null;
+    setTimeout(function() {
+      connectWebSocket();
+    }, 1000);
+  };
+
+  websocket.onerror = function(err) {
+    console.error('Websocket encountered error: ', err.message, 'Closing socket');
+    websocket.close();
+  };
 }
 
 function onDocumentReady() {
-  initializeEvents();
+  connectWebSocket();
   showLoading();
   setTimeout(() => {
     fetch("/pages/dashboard.html")
